@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+:root {
+  --color-navy: #0a1628;
+  --color-navy-dark: #071020;
+  --color-orange: #f97316;
+  --color-orange-dark: #ea6c0a;
+}
+
+body {
+  font-family: 'Sarabun', Arial, sans-serif;
+  background: #ffffff;
+  color: #1a1a2e;
+}
+
+/* Hide scrollbar but keep scroll functionality */
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
