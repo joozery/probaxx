@@ -2,27 +2,29 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { useQuote } from '@/context/QuoteContext'
 
 const navLinks = [
-  { label: 'หน้าแรก', href: '#home', active: true },
-  { label: 'บริการของเรา', href: '#services' },
-  { label: 'เกี่ยวกับเรา', href: '#about' },
-  { label: 'ผลงานของเรา', href: '#portfolio' },
-  { label: 'บทความ', href: '#blog' },
-  { label: 'ติดต่อเรา', href: '#contact' },
+  { label: 'หน้าแรก', href: '/' },
+  { label: 'บริการของเรา', href: '/services' },
+  { label: 'เกี่ยวกับเรา', href: '/about' },
+  { label: 'ผลงานของเรา', href: '/#portfolio' },
+  { label: 'บทความ', href: '/#blog' },
+  { label: 'ติดต่อเรา', href: '/#contact' },
 ]
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const { openQuote } = useQuote()
+  const pathname = usePathname()
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link href="#home" className="flex-shrink-0">
+          <Link href="/" className="flex-shrink-0">
             <Image
               src="/logo/logo.jpeg"
               alt="PROBAX Logo"
@@ -40,7 +42,7 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={`text-sm font-medium transition-colors relative pb-1 ${
-                  link.active
+                  pathname === link.href || (link.href === '/services' && pathname.startsWith('/services'))
                     ? 'text-[#0a1628] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#f97316]'
                     : 'text-gray-600 hover:text-[#0a1628]'
                 }`}
@@ -90,7 +92,7 @@ export default function Navbar() {
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
                 className={`block text-sm font-medium py-2 px-2 rounded ${
-                  link.active ? 'text-[#f97316]' : 'text-gray-700 hover:text-[#0a1628]'
+                  pathname === link.href ? 'text-[#f97316]' : 'text-gray-700 hover:text-[#0a1628]'
                 }`}
               >
                 {link.label}

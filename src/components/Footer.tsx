@@ -33,9 +33,9 @@ export default function Footer() {
             <Image
               src="/logo/logo.jpeg"
               alt="PROBAX Logo"
-              width={140}
-              height={50}
-              className="h-12 w-auto object-contain mb-5 mix-blend-screen"
+              width={220}
+              height={70}
+              className="h-14 w-auto object-contain mb-5 mix-blend-screen brightness-110"
             />
             <p className="text-white/60 text-sm leading-relaxed mb-6">
               ผู้เชี่ยวชาญงานล้างถังเก็บน้ำและถังบำบัดน้ำเสีย ด้วยทีมงานมืออาชีพที่ผ่านการฝึกอบรม มาตรฐานสูง เพื่อคุณภาพน้ำที่สะอาดและปลอดภัยสำหรับคุณและครอบครัว
