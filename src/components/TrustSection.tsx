@@ -1,4 +1,3 @@
-
 const trustItems = [
   {
     icon: (
@@ -56,7 +55,7 @@ export default function TrustSection() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
-          {/* Left — Text + Images */}
+          {/* Left — Text */}
           <div>
             {/* Badge */}
             <div className="flex items-center gap-3 mb-5">
@@ -74,13 +73,12 @@ export default function TrustSection() {
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0a1628] leading-snug mb-6">
               ด้วยทีมงานมืออาชีพ
             </h2>
-            <p className="text-gray-500 text-sm leading-relaxed max-w-sm mb-10">
+            <p className="text-gray-500 text-sm leading-relaxed max-w-sm">
               เราใส่ใจทุกขั้นตอน ด้วยทีมงานที่ผ่านการฝึกอบรม
               และมีใบรับรองมาตรฐาน เพื่อให้คุณมั่นใจได้ 100%
               ในความสะอาด ปลอดภัย และได้มาตรฐานทุกครั้ง
             </p>
-
-          
+          </div>
 
           {/* Right — Trust Cards 2x2 */}
           <div className="grid grid-cols-2 gap-4">
