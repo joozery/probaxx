@@ -1,5 +1,3 @@
-'use client'
-import Image from 'next/image'
 
 const trustItems = [
   {
@@ -82,57 +80,7 @@ export default function TrustSection() {
               ในความสะอาด ปลอดภัย และได้มาตรฐานทุกครั้ง
             </p>
 
-            {/* Images */}
-            <div className="relative h-60 md:h-72">
-              {/* Big tank image */}
-              <div className="absolute left-0 bottom-0 w-44 md:w-56 h-52 md:h-64 rounded-2xl overflow-hidden shadow-xl border-4 border-white">
-                <Image
-                  src="/images/trust-tank.png"
-                  alt="ถังเก็บน้ำ"
-                  fill
-                  className="object-cover"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement
-                    target.style.display = 'none'
-                    target.parentElement!.style.background = 'linear-gradient(135deg,#1d4ed8,#0ea5e9)'
-                  }}
-                />
-                {/* Fallback gradient */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-sky-400 flex items-center justify-center">
-                  <svg className="w-20 h-20 text-white/40" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>
-                  </svg>
-                </div>
-              </div>
-
-              {/* Worker circle image */}
-              <div className="absolute left-32 md:left-40 bottom-4 w-36 md:w-44 h-36 md:h-44 rounded-full overflow-hidden shadow-2xl border-4 border-white">
-                <Image
-                  src="/images/trust-worker.png"
-                  alt="ช่างมืออาชีพ"
-                  fill
-                  className="object-cover"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement
-                    target.style.display = 'none'
-                  }}
-                />
-                {/* Fallback gradient */}
-                <div className="absolute inset-0 bg-gradient-to-br from-sky-500 to-blue-700 flex items-center justify-center">
-                  <svg className="w-16 h-16 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Water drop decoration */}
-              <div className="absolute right-4 top-0 opacity-30">
-                <svg className="w-16 h-16 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C12 2 4 10 4 15a8 8 0 0016 0c0-5-8-13-8-13z"/>
-                </svg>
-              </div>
-            </div>
-          </div>
+          
 
           {/* Right — Trust Cards 2x2 */}
           <div className="grid grid-cols-2 gap-4">
