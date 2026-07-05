@@ -22,7 +22,7 @@ export interface IServicesSettings extends Document {
   }
   portfolio: {
     sectionTitle: string
-    clients: Array<{ name: string; type: string; abbr: string }>
+    clients: Array<{ name: string; clientType: string; abbr: string }>
     gallery: Array<{ src: string; alt: string }>
     caseStudy: {
       image: string
@@ -92,14 +92,14 @@ const ServicesSettingsSchema = new Schema<IServicesSettings>(
     portfolio: {
       sectionTitle: { type: String, default: 'ผลงานที่ผ่านมา' },
       clients: {
-        type: [{ name: String, type: String, abbr: String }],
+        type: [{ name: String, clientType: String, abbr: String }],
         default: [
-          { name: 'โรงแรมทวินโลตัส', type: 'โรงแรม & รีสอร์ท', abbr: 'TL' },
-          { name: 'นิคมอุตสาหกรรมภาคใต้', type: 'โรงงานอุตสาหกรรม', abbr: 'SI' },
-          { name: 'คอนโด ซีวิว ตรัง', type: 'คอนโดมิเนียม', abbr: 'CV' },
-          { name: 'โรงพยาบาลตรังรวมแพทย์', type: 'โรงพยาบาล', abbr: 'TR' },
-          { name: 'เทศบาลนครตรัง', type: 'หน่วยงานราชการ', abbr: 'TM' },
-          { name: 'ห้างสรรพสินค้าโรบินสัน', type: 'ศูนย์การค้า', abbr: 'RB' },
+          { name: 'โรงแรมทวินโลตัส', clientType: 'โรงแรม & รีสอร์ท', abbr: 'TL' },
+          { name: 'นิคมอุตสาหกรรมภาคใต้', clientType: 'โรงงานอุตสาหกรรม', abbr: 'SI' },
+          { name: 'คอนโด ซีวิว ตรัง', clientType: 'คอนโดมิเนียม', abbr: 'CV' },
+          { name: 'โรงพยาบาลตรังรวมแพทย์', clientType: 'โรงพยาบาล', abbr: 'TR' },
+          { name: 'เทศบาลนครตรัง', clientType: 'หน่วยงานราชการ', abbr: 'TM' },
+          { name: 'ห้างสรรพสินค้าโรบินสัน', clientType: 'ศูนย์การค้า', abbr: 'RB' },
         ],
       },
       gallery: {
@@ -139,6 +139,10 @@ const ServicesSettingsSchema = new Schema<IServicesSettings>(
   },
   { timestamps: true }
 )
+
+if (process.env.NODE_ENV === 'development' && models.ServicesSettings) {
+  delete (models as Record<string, unknown>).ServicesSettings
+}
 
 export const ServicesSettings =
   models.ServicesSettings ||
