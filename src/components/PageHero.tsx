@@ -4,9 +4,11 @@ interface PageHeroProps {
   title: string;
   description: string;
   imageSrc: string;
+  overlayOpacity?: number;
 }
 
-export default function PageHero({ title, description, imageSrc }: PageHeroProps) {
+export default function PageHero({ title, description, imageSrc, overlayOpacity = 40 }: PageHeroProps) {
+  const opacity = Math.min(90, Math.max(0, overlayOpacity)) / 100
   return (
     <div className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden bg-[#0a1628]">
       {/* Background Image */}
@@ -15,10 +17,11 @@ export default function PageHero({ title, description, imageSrc }: PageHeroProps
           src={imageSrc}
           alt={title}
           fill
-          className="object-cover object-center opacity-40"
+          className="object-cover object-center"
+          style={{ opacity: 1 - opacity * 0.3 }}
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] via-[#0a1628]/80 to-transparent" />
+        <div className="absolute inset-0" style={{ background: `rgba(10,22,40,${opacity})` }} />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
