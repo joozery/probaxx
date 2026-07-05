@@ -9,7 +9,7 @@ const navLinks = [
   { label: 'หน้าแรก', href: '/' },
   { label: 'บริการของเรา', href: '/services' },
   { label: 'เกี่ยวกับเรา', href: '/about' },
-  { label: 'ผลงานของเรา', href: '/#portfolio' },
+  { label: 'ผลงานของเรา', href: '/portfolio' },
   { label: 'บทความ', href: '/articles' },
   { label: 'ติดต่อเรา', href: '/contact' },
 ]
