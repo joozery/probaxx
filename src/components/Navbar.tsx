@@ -10,6 +10,7 @@ const navLinks = [
   { label: 'บริการของเรา', href: '/services' },
   { label: 'เกี่ยวกับเรา', href: '/about' },
   { label: 'ผลงานของเรา', href: '/#portfolio' },
+  { label: 'บทความ', href: '/articles' },
   { label: 'ติดต่อเรา', href: '/contact' },
 ]
 
@@ -41,7 +42,7 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={`text-sm font-medium transition-colors relative pb-1 ${
-                  pathname === link.href || (link.href === '/services' && pathname.startsWith('/services'))
+                  pathname === link.href || (link.href === '/services' && pathname.startsWith('/services')) || (link.href === '/articles' && pathname.startsWith('/articles'))
                     ? 'text-[#0a1628] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#f97316]'
                     : 'text-gray-600 hover:text-[#0a1628]'
                 }`}
