@@ -66,11 +66,19 @@ export default function QuoteModal() {
 
   const handleNext = () => { if (validateStep1()) setStep(2) }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!validateStep2()) return
-    // TODO: send to API / email / Line Notify
-    console.log('Quote request:', form)
+    await fetch('/api/quotes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: form.name,
+        phone: form.phone,
+        service: form.service,
+        message: `ขนาดถัง: ${form.tankSize}\nที่อยู่: ${form.address}\nรายละเอียด: ${form.detail}`,
+      }),
+    })
     setSubmitted(true)
   }
 

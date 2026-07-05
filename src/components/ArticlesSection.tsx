@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 
 const articles = [
   {
@@ -67,24 +68,24 @@ export default function ArticlesSection() {
             </p>
           </div>
           <div className="flex-shrink-0 self-start mt-2">
-            <a
-              href="#"
+            <Link
+              href="/articles"
               className="inline-flex items-center gap-2 text-sm font-semibold text-[#0a1628] hover:text-[#f97316] transition-colors group"
             >
               ดูบทความทั้งหมด
               <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
-            </a>
+            </Link>
           </div>
         </div>
 
         {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {articles.map((article, i) => (
-            <a
+            <Link
               key={i}
-              href="#"
+              href="/articles"
               className={`group flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 ${article.borderHover}`}
             >
               {/* Thumbnail */}
@@ -134,7 +135,7 @@ export default function ArticlesSection() {
                   </span>
                 </div>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
 
