@@ -21,7 +21,7 @@ export const CHANNEL_META: Record<
   ChannelType,
   { label: string; color: string; placeholder: string; hint: string }
 > = {
-  phone: { label: 'โทรศัพท์', color: '#22c55e', placeholder: '085-556-4994', hint: 'เบอร์โทรศัพท์' },
+  phone: { label: 'โทรศัพท์', color: '#06c755', placeholder: '085-556-4994', hint: 'เบอร์โทรศัพท์' },
   line: { label: 'LINE', color: '#06c755', placeholder: '@probax', hint: 'LINE ID (เช่น @probax) หรือวาง URL เต็ม' },
   messenger: { label: 'Messenger', color: '#0084ff', placeholder: 'ชื่อเพจ', hint: 'ชื่อเพจ (m.me/ชื่อ) หรือวาง URL เต็ม' },
   facebook: { label: 'Facebook', color: '#1877f2', placeholder: 'ชื่อเพจ', hint: 'ชื่อเพจ หรือวาง URL เต็ม' },
