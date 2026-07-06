@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import { revalidatePath } from 'next/cache'
 import { connectDB } from '@/lib/mongoose'
 import { PortfolioSettings } from '@/models/PortfolioSettings'
 
@@ -32,5 +33,9 @@ export async function PATCH(req: NextRequest) {
     { $set: body },
     { new: true, upsert: true }
   )
+  
+  revalidatePath('/portfolio')
+  revalidatePath('/services') // Because services uses portfolio data
+  
   return NextResponse.json(settings)
 }

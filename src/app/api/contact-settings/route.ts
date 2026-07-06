@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import { revalidatePath } from 'next/cache'
 import { connectDB } from '@/lib/mongoose'
 import { ContactSettings } from '@/models/ContactSettings'
 
@@ -32,5 +33,9 @@ export async function PATCH(req: NextRequest) {
     { $set: body },
     { new: true, upsert: true }
   )
+  
+  revalidatePath('/contact')
+  revalidatePath('/', 'layout') // Since contact data is often used globally
+  
   return NextResponse.json(settings)
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import Image from 'next/image'
 import Link from 'next/link'
 import CTABanner from '@/components/CTABanner'
@@ -8,9 +9,6 @@ import { connectDB } from '@/lib/mongoose'
 import { HomeSettings, type IHomeSettings } from '@/models/HomeSettings'
 import { Article, IArticle } from '@/models/Article'
 import { PageSettings } from '@/models/PageSettings'
-
-import Script from 'next/script'
-import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'บทความ & ข่าวสาร | สาระความรู้เรื่องถังเก็บน้ำ PROBAX',

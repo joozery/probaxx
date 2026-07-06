@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import { revalidatePath } from 'next/cache'
 import { connectDB } from '@/lib/mongoose'
 import { AboutSettings } from '@/models/AboutSettings'
 
@@ -32,5 +33,8 @@ export async function PATCH(req: NextRequest) {
     { $set: body },
     { new: true, upsert: true }
   )
+  
+  revalidatePath('/about')
+  
   return NextResponse.json(settings)
 }

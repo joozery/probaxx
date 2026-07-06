@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import { revalidatePath } from 'next/cache'
 import { connectDB } from '@/lib/mongoose'
 import { HomeSettings } from '@/models/HomeSettings'
 
@@ -32,5 +33,9 @@ export async function PATCH(req: NextRequest) {
     { $set: body },
     { new: true, upsert: true }
   )
+  
+  // Clear Next.js cache for the home page
+  revalidatePath('/')
+  
   return NextResponse.json(settings)
 }
