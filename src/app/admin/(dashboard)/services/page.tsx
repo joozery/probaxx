@@ -404,56 +404,14 @@ export default function ServicesSettingsPage() {
             <Add label="เพิ่มลูกค้า" onClick={() => upP('clients', [...settings.portfolio.clients, { name: '', clientType: '', abbr: '', logo: '' }])} />
           </Card>
 
-          <Card title="แกลเลอรี่ผลงาน" right={<Count n={settings.portfolio.gallery.length} unit="รูป" />}>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {settings.portfolio.gallery.map((g, i) => (
-                <div key={i} className="space-y-1.5">
-                  <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-50 border border-gray-200 group">
-                    {g.src
-                      // eslint-disable-next-line @next/next/no-img-element
-                      ? <img src={g.src} alt={g.alt} className="w-full h-full object-cover" />
-                      : <div className="w-full h-full flex items-center justify-center"><ImageIcon className="w-5 h-5 text-gray-300" /></div>}
-                    <button onClick={() => upP('gallery', settings.portfolio.gallery.filter((_, j) => j !== i))}
-                      className="absolute top-1.5 right-1.5 w-6 h-6 rounded-md bg-white/90 text-gray-500 hover:text-red-500 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm">
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                  <input value={g.alt} onChange={e => upP('gallery', settings.portfolio.gallery.map((x, j) => j === i ? { ...x, alt: e.target.value } : x))} className={cn(F, 'text-xs py-1.5')} placeholder="คำบรรยาย" />
-                </div>
-              ))}
-              <label className="aspect-square rounded-lg border border-dashed border-gray-300 flex flex-col items-center justify-center gap-1 cursor-pointer text-gray-400 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50/40 transition-colors">
-                <Plus className="w-5 h-5" />
-                <span className="text-xs">เพิ่มรูป</span>
-                <input type="file" accept="image/*" className="hidden" onChange={async e => {
-                  const file = e.target.files?.[0]; if (!file) return
-                  const fd = new FormData(); fd.append('file', file)
-                  try {
-                    const r = await fetch('/api/upload', { method: 'POST', body: fd })
-                    const { url } = await r.json()
-                    if (url) upP('gallery', [...settings.portfolio.gallery, { src: url, alt: '' }])
-                  } catch { alert('อัปโหลดไม่สำเร็จ') }
-                  e.target.value = ''
-                }} />
-              </label>
+          <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3.5 flex items-start gap-3">
+            <ImageIcon className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+            <div className="text-xs text-amber-800 leading-relaxed">
+              <b>แกลเลอรี่ผลงานและ Case Study</b> ในหน้านี้ดึงข้อมูลจากหน้า &quot;จัดการผลงาน&quot; โดยอัตโนมัติ (แสดง 8 ผลงานแรก)
+              — ไปแก้ไขได้ที่{' '}
+              <a href="/admin/portfolio" className="font-bold underline hover:text-amber-900">จัดการผลงาน →</a>
             </div>
-          </Card>
-
-          <Card title="กรณีศึกษาเด่น (Case Study)">
-            <div className="grid lg:grid-cols-2 gap-5">
-              <div>
-                <label className={L}>รูปภาพ</label>
-                <ImageUpload value={settings.portfolio.caseStudy.image} onChange={url => upP('caseStudy', { ...settings.portfolio.caseStudy, image: url })} />
-              </div>
-              <div className="space-y-4">
-                <Field label="ชื่อโปรเจกต์" value={settings.portfolio.caseStudy.title} onChange={v => upP('caseStudy', { ...settings.portfolio.caseStudy, title: v })} />
-                <div className="grid grid-cols-2 gap-3">
-                  <Field label="ระยะเวลา" value={settings.portfolio.caseStudy.duration} onChange={v => upP('caseStudy', { ...settings.portfolio.caseStudy, duration: v })} placeholder="2 วัน" />
-                  <Field label="ผลลัพธ์" value={settings.portfolio.caseStudy.result} onChange={v => upP('caseStudy', { ...settings.portfolio.caseStudy, result: v })} placeholder="น้ำใส 100%" />
-                </div>
-                <Field label="เรื่องราว" value={settings.portfolio.caseStudy.description} onChange={v => upP('caseStudy', { ...settings.portfolio.caseStudy, description: v })} rows={4} />
-              </div>
-            </div>
-          </Card>
+          </div>
         </Tabs.Content>
 
         {/* ── FAQ ── */}

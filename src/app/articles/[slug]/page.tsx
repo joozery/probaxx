@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { connectDB } from '@/lib/mongoose'
+import { HomeSettings, type IHomeSettings } from '@/models/HomeSettings'
 import { Article, IArticle } from '@/models/Article'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
@@ -13,6 +14,16 @@ const OG_FALLBACK = `${SITE_URL}/cover/heroarticle.png`
 
 interface Props {
   params: Promise<{ slug: string }>
+}
+
+async function getCta(): Promise<IHomeSettings['cta']> {
+  let raw = await HomeSettings.findOne().lean()
+  if (!raw) {
+    const doc = new HomeSettings({})
+    await doc.save()
+    raw = doc.toObject()
+  }
+  return (JSON.parse(JSON.stringify(raw)) as unknown as IHomeSettings).cta
 }
 
 async function getArticle(slug: string): Promise<IArticle | null> {
@@ -285,7 +296,7 @@ export default async function ArticleDetailPage({ params }: Props) {
           </div>
         </div>
 
-        <CTABanner />
+        <CTABanner data={await getCta()} />
         <Footer />
       </main>
     </>

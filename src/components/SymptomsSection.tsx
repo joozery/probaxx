@@ -1,16 +1,11 @@
 import Image from 'next/image'
-import Link from 'next/link'
+import type { IHomeSettings } from '@/models/HomeSettings'
 
-const symptoms = [
+const cardStyles = [
   {
-    image: '/symptoms/smell.png',
-    number: '01',
     color: '#4a5568',
     numberBg: 'bg-[#4a5568]',
     titleColor: 'text-[#0a1628]',
-    iconColor: 'text-[#4a5568]',
-    title: 'น้ำมีกลิ่น',
-    desc: 'กลิ่นเหม็น อับ หรือ\nผิดปกติจากน้ำประปา',
     icon: (
       <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z" />
@@ -18,14 +13,9 @@ const symptoms = [
     ),
   },
   {
-    image: '/symptoms/turbid.png',
-    number: '02',
     color: '#f97316',
     numberBg: 'bg-[#f97316]',
     titleColor: 'text-[#f97316]',
-    iconColor: 'text-[#f97316]',
-    title: 'น้ำขุ่น',
-    desc: 'น้ำขุ่น มีสิ่ง\nตกตะกอนปนเปื้อน',
     icon: (
       <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1M4.22 4.22l.71.71m12.73 12.73.71.71M3 12H2m20 0h-1M4.22 19.78l.71-.71M18.36 5.64l.71-.71" />
@@ -34,14 +24,9 @@ const symptoms = [
     ),
   },
   {
-    image: '/symptoms/sediment.png',
-    number: '03',
     color: '#0d9488',
     numberBg: 'bg-[#0d9488]',
     titleColor: 'text-[#0d9488]',
-    iconColor: 'text-[#0d9488]',
-    title: 'มีตะกอน',
-    desc: 'ตะกอน ตะไคร่ หรือ\nสนิมเกาะผนังถัง',
     icon: (
       <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 12h12M6 8h12M6 16h12M3 6h.01M3 12h.01M3 18h.01" />
@@ -49,14 +34,9 @@ const symptoms = [
     ),
   },
   {
-    image: '/symptoms/overdue.png',
-    number: '04',
     color: '#7c3aed',
     numberBg: 'bg-[#7c3aed]',
     titleColor: 'text-[#7c3aed]',
-    iconColor: 'text-[#7c3aed]',
-    title: 'ไม่เคยล้างเกิน 1 ปี',
-    desc: 'ไม่ได้ทำความสะอาด\nมากกว่า 1 ปี',
     icon: (
       <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
@@ -65,7 +45,7 @@ const symptoms = [
   },
 ]
 
-export default function SymptomsSection() {
+export default function SymptomsSection({ data }: { data: IHomeSettings['symptoms'] }) {
   return (
     <section className="relative py-16 md:py-24 overflow-hidden bg-[#f0f6ff]">
       {/* Background water bubbles decoration */}
@@ -88,15 +68,14 @@ export default function SymptomsSection() {
                 <div className="w-5 h-0.5 bg-[#f97316]" />
                 <div className="w-2 h-0.5 bg-[#f97316]" />
               </div>
-              <span className="text-[#f97316] text-xs font-bold tracking-widest uppercase">Warning Signs</span>
+              <span className="text-[#f97316] text-xs font-bold tracking-widest uppercase">{data.badge}</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-extrabold text-[#0a1628] leading-[1.2] mb-4">
-              อาการที่บ่งบอกว่า<br />
-              <span className="text-[#f97316]">ควรล้างถัง</span>ได้แล้ว
+              {data.title1}<br />
+              <span className="text-[#f97316]">{data.titleOrange}</span>{data.title3}
             </h2>
             <p className="text-gray-500 text-base max-w-sm leading-relaxed">
-              หากพบอาการเหล่านี้ ควรติดต่อผู้เชี่ยวชาญ<br />
-              เพื่อตรวจสอบและล้างถังโดยเร็ว
+              {data.description}
             </p>
           </div>
 
@@ -109,9 +88,9 @@ export default function SymptomsSection() {
                 </svg>
               </div>
               <div>
-                <h4 className="font-bold text-[#0a1628] text-sm mb-1.5">การล้างถังเก็บน้ำเป็นประจำ</h4>
+                <h4 className="font-bold text-[#0a1628] text-sm mb-1.5">{data.infoTitle}</h4>
                 <p className="text-gray-500 text-xs leading-relaxed">
-                  ช่วยให้คุณและครอบครัว ปลอดภัยจากสิ่งปนเปื้อน และมั่นใจในคุณภาพน้ำที่ดีในทุกวัน
+                  {data.infoDesc}
                 </p>
               </div>
             </div>
@@ -120,7 +99,9 @@ export default function SymptomsSection() {
 
         {/* Cards Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-          {symptoms.map((item, i) => (
+          {data.items.map((item, i) => {
+            const style = cardStyles[i % cardStyles.length]
+            return (
             <div key={i} className="group bg-white rounded-3xl shadow-md border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 cursor-pointer">
               {/* Image — overflow-hidden scoped here only */}
               <div className="relative h-52 overflow-hidden rounded-t-3xl">
@@ -132,8 +113,8 @@ export default function SymptomsSection() {
                   className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                 />
                 {/* Number Badge — flush corner */}
-                <div className={`absolute top-0 left-0 ${item.numberBg} text-white font-black text-sm w-10 h-10 rounded-tl-3xl rounded-br-2xl flex items-center justify-center shadow-md`}>
-                  {item.number}
+                <div className={`absolute top-0 left-0 ${style.numberBg} text-white font-black text-sm w-10 h-10 rounded-tl-3xl rounded-br-2xl flex items-center justify-center shadow-md`}>
+                  {String(i + 1).padStart(2, '0')}
                 </div>
               </div>
 
@@ -141,21 +122,22 @@ export default function SymptomsSection() {
               <div className="flex justify-center -mt-8 relative z-10 mb-3">
                 <div
                   className="w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-lg border-[3px]"
-                  style={{ borderColor: item.color }}
+                  style={{ borderColor: style.color }}
                 >
-                  <span style={{ color: item.color }} className="[&>svg]:w-8 [&>svg]:h-8">
-                    {item.icon}
+                  <span style={{ color: style.color }} className="[&>svg]:w-8 [&>svg]:h-8">
+                    {style.icon}
                   </span>
                 </div>
               </div>
 
               {/* Text content */}
               <div className="px-5 pb-7 text-center">
-                <h3 className={`font-extrabold text-lg mb-2 leading-tight ${item.titleColor}`}>{item.title}</h3>
+                <h3 className={`font-extrabold text-lg mb-2 leading-tight ${style.titleColor}`}>{item.title}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed whitespace-pre-line">{item.desc}</p>
               </div>
             </div>
-          ))}
+            )
+          })}
         </div>
 
 

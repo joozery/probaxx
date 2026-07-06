@@ -5,6 +5,7 @@ import CTABanner from '@/components/CTABanner'
 import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
 import { connectDB } from '@/lib/mongoose'
+import { HomeSettings, type IHomeSettings } from '@/models/HomeSettings'
 import { Article, IArticle } from '@/models/Article'
 import { PageSettings } from '@/models/PageSettings'
 
@@ -49,11 +50,15 @@ export default async function ArticlesPage({ searchParams }: Props) {
   }
 
   const skip = (currentPage - 1) * limit
-  const [rawArticles, total, heroRaw] = await Promise.all([
+  const [rawArticles, total, heroRaw, homeRaw] = await Promise.all([
     Article.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
     Article.countDocuments(filter),
     PageSettings.findOne({ page: 'articles' }).lean(),
+    HomeSettings.findOne().lean(),
   ])
+  const cta = homeRaw
+    ? (JSON.parse(JSON.stringify(homeRaw)) as unknown as IHomeSettings).cta
+    : (JSON.parse(JSON.stringify((await new HomeSettings({}).save()).toObject())) as unknown as IHomeSettings).cta
 
   const hero = heroRaw ?? {
     heroTitle: 'บทความ & ข่าวสาร',
@@ -246,7 +251,7 @@ export default async function ArticlesPage({ searchParams }: Props) {
         </div>
       </section>
 
-      <CTABanner />
+      <CTABanner data={cta} />
       <Footer />
     </main>
   )

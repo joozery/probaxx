@@ -18,6 +18,7 @@ import {
   Info,
   Trophy,
   Phone,
+  Home,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -25,6 +26,7 @@ const navItems = [
   { label: 'ภาพรวม', href: '/admin', icon: LayoutDashboard },
   { label: 'ข้อความ', href: '/admin/messages', icon: MessageSquare, badge: 3 },
   { label: 'ใบเสนอราคา', href: '/admin/quotes', icon: ClipboardList, badge: 2 },
+  { label: 'หน้าแรก', href: '/admin/home', icon: Home },
   { label: 'บทความ', href: '/admin/articles', icon: FileText },
   { label: 'บริการ', href: '/admin/services', icon: Wrench },
   { label: 'เกี่ยวกับเรา', href: '/admin/about', icon: Info },
