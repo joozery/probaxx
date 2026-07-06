@@ -2,8 +2,12 @@ import { NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import { connectDB } from '@/lib/mongoose'
 import Admin from '@/models/Admin'
+import { requireAdmin } from '@/lib/auth'
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const denied = await requireAdmin()
+  if (denied) return denied
+
   await connectDB()
   const { id } = await params
   const body = await req.json()
@@ -17,6 +21,9 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 }
 
 export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const denied = await requireAdmin()
+  if (denied) return denied
+
   await connectDB()
   const { id } = await params
   await Admin.findByIdAndDelete(id)

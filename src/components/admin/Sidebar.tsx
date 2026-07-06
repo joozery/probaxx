@@ -19,6 +19,7 @@ import {
   Trophy,
   Phone,
   Home,
+  MessageCircle,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -32,6 +33,7 @@ const navItems = [
   { label: 'เกี่ยวกับเรา', href: '/admin/about', icon: Info },
   { label: 'ผลงาน', href: '/admin/portfolio', icon: Trophy },
   { label: 'ติดต่อเรา', href: '/admin/contact', icon: Phone },
+  { label: 'ปุ่มติดต่อลอย', href: '/admin/contact-widget', icon: MessageCircle },
   { label: 'Footer', href: '/admin/footer', icon: LayoutTemplate },
 ]
 
@@ -59,7 +61,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
   }
 
   const isActive = (href: string) =>
-    href === '/admin' ? pathname === '/admin' : pathname.startsWith(href)
+    href === '/admin' ? pathname === '/admin' : pathname === href || pathname.startsWith(href + '/')
 
   return (
     <aside

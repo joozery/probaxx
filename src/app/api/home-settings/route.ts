@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
+import { requireAdmin } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
 import { connectDB } from '@/lib/mongoose'
 import { HomeSettings } from '@/models/HomeSettings'
@@ -21,10 +21,8 @@ export async function GET() {
 }
 
 export async function PATCH(req: NextRequest) {
-  const cookieStore = await cookies()
-  if (!cookieStore.get('admin_session')?.value) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  const denied = await requireAdmin()
+  if (denied) return denied
 
   await connectDB()
   const body = await req.json()

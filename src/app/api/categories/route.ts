@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { connectDB } from '@/lib/mongoose'
 import { Category } from '@/models/Category'
+import { requireAdmin } from '@/lib/auth'
 
 const DEFAULT_CATEGORIES = [
   { name: 'ความรู้ทั่วไป', color: 'bg-blue-50 text-blue-700' },
@@ -26,6 +27,9 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const denied = await requireAdmin()
+  if (denied) return denied
+
   await connectDB()
   const { name, color } = await req.json()
   if (!name?.trim()) return NextResponse.json({ error: 'Name required' }, { status: 400 })

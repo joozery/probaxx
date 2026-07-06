@@ -64,7 +64,7 @@ export default function AdminLoginPage() {
                   name="email"
                   type="email"
                   required
-                  defaultValue="admin@probax.co.th"
+                  autoComplete="username"
                   className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1d4ed8]/20 focus:border-[#1d4ed8] transition-all"
                   placeholder="admin@probax.co.th"
                 />
@@ -80,7 +80,7 @@ export default function AdminLoginPage() {
                   name="password"
                   type={show ? 'text' : 'password'}
                   required
-                  defaultValue="admin1234"
+                  autoComplete="current-password"
                   className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#1d4ed8]/20 focus:border-[#1d4ed8] transition-all"
                   placeholder="••••••••"
                 />

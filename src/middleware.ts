@@ -1,15 +1,17 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { SESSION_COOKIE, verifySession } from '@/lib/session'
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname
-  
+
   // Protect all /admin routes except /admin/login
   if (path.startsWith('/admin') && path !== '/admin/login') {
-    const session = request.cookies.get('admin_session')?.value
-    
-    // If there is no session cookie, redirect to the login page
-    if (!session) {
+    const token = request.cookies.get(SESSION_COOKIE)?.value
+    const adminId = await verifySession(token)
+
+    // No valid (signed) session cookie → redirect to the login page
+    if (!adminId) {
       return NextResponse.redirect(new URL('/admin/login', request.url))
     }
   }

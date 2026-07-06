@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server'
 import { connectDB } from '@/lib/mongoose'
 import FooterSettings from '@/models/FooterSettings'
+import { requireAdmin } from '@/lib/auth'
 
 const DEFAULT = {
+  logo: '/logo/logo.jpeg',
   description: 'ผู้เชี่ยวชาญงานล้างถังเก็บน้ำและถังบำบัดน้ำเสีย ด้วยทีมงานมืออาชีพที่ผ่านการฝึกอบรม มาตรฐานสูง เพื่อคุณภาพน้ำที่สะอาดและปลอดภัยสำหรับคุณและครอบครัว',
   certifications: ['ISO 9001', 'มาตรฐาน กรมอนามัย', 'ใบอนุญาต อย.'],
   socialLinks: [
@@ -41,6 +43,9 @@ export async function GET() {
 }
 
 export async function PATCH(req: Request) {
+  const denied = await requireAdmin()
+  if (denied) return denied
+
   await connectDB()
   const body = await req.json()
   let settings = await FooterSettings.findOne()

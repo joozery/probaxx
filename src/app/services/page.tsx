@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Script from 'next/script'
 import Navbar from '@/components/Navbar'
 import ServicesHero from '@/components/ServicesHero'
 import ServicesSection from '@/components/ServicesSection'
@@ -65,7 +64,7 @@ export default async function ServicesPage() {
 
   return (
     <main>
-      <Script id="schema-service" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }} />
       <Navbar />
       <ServicesHero data={settings.hero} />
       <ServicesSection data={settings.services} />

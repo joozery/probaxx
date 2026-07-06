@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { Plus, Trash2, Loader2, Save, GripVertical, LayoutTemplate, Phone, Link2, FileText, Award, Globe, CheckCircle2, MapPin, Mail, Smartphone } from 'lucide-react'
+import { Plus, Trash2, Loader2, Save, GripVertical, LayoutTemplate, Phone, Link2, FileText, Award, Globe, CheckCircle2, MapPin, Mail, Smartphone, Upload, X, Image as ImageIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface SocialLink { label: string; url: string }
@@ -8,6 +8,7 @@ interface NavLink { label: string; href: string }
 interface Contact { address: string; phone: string; companyName: string; lineId: string; email: string }
 
 interface FooterData {
+  logo: string
   description: string
   certifications: string[]
   socialLinks: SocialLink[]
@@ -18,6 +19,7 @@ interface FooterData {
 }
 
 const EMPTY_FOOTER: FooterData = {
+  logo: '',
   description: '',
   certifications: [],
   socialLinks: [],
@@ -86,6 +88,61 @@ function AddButton({ onClick, label }: { onClick: () => void; label: string }) {
     >
       <Plus className="w-3.5 h-3.5" />{label}
     </button>
+  )
+}
+
+function LogoUpload({ value, onChange }: { value: string; onChange: (url: string) => void }) {
+  const [uploading, setUploading] = useState(false)
+
+  async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]; if (!file) return
+    setUploading(true)
+    try {
+      const fd = new FormData(); fd.append('file', file)
+      const res = await fetch('/api/upload', { method: 'POST', body: fd })
+      const { url } = await res.json()
+      if (url) onChange(url)
+      else alert('อัปโหลดไม่สำเร็จ')
+    } catch { alert('อัปโหลดไม่สำเร็จ') }
+    setUploading(false); e.target.value = ''
+  }
+
+  return (
+    <div className="flex flex-col sm:flex-row items-start gap-4">
+      {/* Preview on dark background — matches how the logo appears in the real Footer */}
+      <div className="relative w-48 h-24 rounded-xl overflow-hidden bg-[#071020] border border-slate-200 flex items-center justify-center shrink-0">
+        {uploading && (
+          <div className="absolute inset-0 z-10 bg-black/50 flex items-center justify-center">
+            <Loader2 className="w-5 h-5 animate-spin text-white" />
+          </div>
+        )}
+        {value ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={value} alt="logo preview" className="max-w-full max-h-full object-contain mix-blend-screen brightness-110" />
+        ) : (
+          <span className="text-xs text-white/40">ยังไม่มีโลโก้</span>
+        )}
+      </div>
+
+      <div className="flex-1 w-full space-y-2">
+        <div className="flex gap-2">
+          <label className="cursor-pointer inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 px-3 py-2 rounded-lg transition-colors">
+            <Upload className="w-3.5 h-3.5" />อัปโหลดโลโก้
+            <input type="file" accept="image/*" className="hidden" onChange={handleFile} />
+          </label>
+          {value && (
+            <button
+              onClick={() => onChange('')}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-red-500 hover:bg-red-50 px-3 py-2 rounded-lg transition-colors border border-red-100"
+            >
+              <X className="w-3.5 h-3.5" />ลบ
+            </button>
+          )}
+        </div>
+        <input value={value} onChange={e => onChange(e.target.value)} placeholder="หรือวาง URL รูปโลโก้" className={cn(INPUT, 'text-xs')} />
+        <p className="text-[11px] text-slate-400">แนะนำไฟล์ PNG พื้นหลังโปร่งใส เพื่อให้แสดงบนพื้นหลังสีเข้มได้ดี</p>
+      </div>
+    </div>
   )
 }
 
@@ -184,6 +241,15 @@ export default function FooterSettingsPage() {
       </div>
 
       <div className="space-y-4">
+
+        {/* Logo */}
+        <SectionCard
+          icon={ImageIcon} title="โลโก้"
+          subtitle="โลโก้ที่แสดงในส่วน Footer ของเว็บไซต์"
+          accent="#06b6d4" iconBg="bg-cyan-50" iconColor="text-cyan-600"
+        >
+          <LogoUpload value={data.logo} onChange={v => set('logo', v)} />
+        </SectionCard>
 
         {/* Brand Description */}
         <SectionCard

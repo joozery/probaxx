@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { connectDB } from '@/lib/mongoose'
 import { Category } from '@/models/Category'
+import { requireAdmin } from '@/lib/auth'
 
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const denied = await requireAdmin()
+  if (denied) return denied
+
   await connectDB()
   const { id } = await params
   await Category.findByIdAndDelete(id)
@@ -10,6 +14,9 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
 }
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const denied = await requireAdmin()
+  if (denied) return denied
+
   await connectDB()
   const { id } = await params
   const body = await req.json()

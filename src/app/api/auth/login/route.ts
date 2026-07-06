@@ -3,6 +3,7 @@ import { cookies } from 'next/headers'
 import bcrypt from 'bcryptjs'
 import { connectDB } from '@/lib/mongoose'
 import Admin from '@/models/Admin'
+import { SESSION_COOKIE, signSession } from '@/lib/session'
 
 export async function POST(req: Request) {
   await connectDB()
@@ -19,11 +20,12 @@ export async function POST(req: Request) {
   }
 
   const cookieStore = await cookies()
-  cookieStore.set('admin_session', admin._id.toString(), {
+  cookieStore.set(SESSION_COOKIE, await signSession(admin._id.toString()), {
     httpOnly: true,
     path: '/',
     maxAge: 60 * 60 * 24 * 7,
     sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
   })
 
   return NextResponse.json({ ok: true, name: admin.name, role: admin.role })

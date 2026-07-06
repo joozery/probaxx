@@ -6,7 +6,6 @@ import { QuoteProvider } from '@/context/QuoteContext'
 import PortfolioClient from './PortfolioClient'
 import { connectDB } from '@/lib/mongoose'
 import { PortfolioSettings, type IPortfolioSettings } from '@/models/PortfolioSettings'
-import Script from 'next/script'
 import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
@@ -41,7 +40,7 @@ export default async function PortfolioPage() {
   return (
     <QuoteProvider>
       <main className="min-h-screen bg-white">
-        <Script id="schema-portfolio" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(portfolioSchema) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(portfolioSchema) }} />
         <Navbar />
         <QuoteModal />
 

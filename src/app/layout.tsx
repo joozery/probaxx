@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { QuoteProvider } from '@/context/QuoteContext'
 import QuoteModal from '@/components/QuoteModal'
-import Script from 'next/script'
+import FloatingContact from '@/components/FloatingContact'
 
 export const metadata: Metadata = {
   title: {
@@ -99,12 +99,13 @@ export default function RootLayout({
           rel="stylesheet"
         />
         {/* Schema.org for Google / AEO */}
-        <Script id="schema-local-business" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }} strategy="beforeInteractive" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }} />
       </head>
       <body className="antialiased" suppressHydrationWarning>
           <QuoteProvider>
             {children}
             <QuoteModal />
+            <FloatingContact />
           </QuoteProvider>
         </body>
     </html>

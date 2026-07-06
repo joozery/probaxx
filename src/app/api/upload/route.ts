@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
-import { cookies } from 'next/headers'
+import { requireAdmin } from '@/lib/auth'
 
 const s3 = new S3Client({
   region: 'auto',
@@ -12,10 +12,8 @@ const s3 = new S3Client({
 })
 
 export async function POST(req: NextRequest) {
-  const cookieStore = await cookies()
-  if (!cookieStore.get('admin_session')?.value) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  const denied = await requireAdmin()
+  if (denied) return denied
 
   const formData = await req.formData()
   const file = formData.get('file') as File | null

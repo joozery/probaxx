@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { connectDB } from '@/lib/mongoose'
 import { Service } from '@/models/Service'
+import { requireAdmin } from '@/lib/auth'
 
 export async function GET() {
   await connectDB()
@@ -9,6 +10,9 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const denied = await requireAdmin()
+  if (denied) return denied
+
   await connectDB()
   const body = await req.json()
   const service = await Service.create(body)

@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { connectDB } from '@/lib/mongoose'
 import { Quote } from '@/models/Quote'
+import { requireAdmin } from '@/lib/auth'
 
 export async function GET() {
+  const denied = await requireAdmin()
+  if (denied) return denied
+
   await connectDB()
   const quotes = await Quote.find().sort({ createdAt: -1 }).lean()
   return NextResponse.json(quotes)

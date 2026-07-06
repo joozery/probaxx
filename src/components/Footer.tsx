@@ -4,6 +4,7 @@ import { connectDB } from '@/lib/mongoose'
 import FooterSettings from '@/models/FooterSettings'
 
 const DEFAULT = {
+  logo: '/logo/logo.jpeg',
   description: 'ผู้เชี่ยวชาญงานล้างถังเก็บน้ำและถังบำบัดน้ำเสีย ด้วยทีมงานมืออาชีพที่ผ่านการฝึกอบรม มาตรฐานสูง เพื่อคุณภาพน้ำที่สะอาดและปลอดภัยสำหรับคุณและครอบครัว',
   certifications: ['ISO 9001', 'มาตรฐาน กรมอนามัย', 'ใบอนุญาต อย.'],
   socialLinks: [{ label: 'Facebook', url: '#' }, { label: 'YouTube', url: '#' }],
@@ -59,7 +60,7 @@ export default async function Footer() {
 
           {/* Brand */}
           <div className="md:col-span-5">
-            <Image src="/logo/logo.jpeg" alt="PROBAX Logo" width={220} height={70} className="h-14 w-auto object-contain mb-5 mix-blend-screen brightness-110" />
+            <Image src={f.logo || '/logo/logo.jpeg'} alt="PROBAX Logo" width={220} height={70} className="h-14 w-auto object-contain mb-5 mix-blend-screen brightness-110" />
             {f.description && (
               <p className="text-white/60 text-sm leading-relaxed mb-6">{f.description}</p>
             )}

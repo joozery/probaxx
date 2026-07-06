@@ -2,6 +2,7 @@ import mongoose, { Schema } from 'mongoose'
 
 const FooterSettingsSchema = new Schema(
   {
+    logo: { type: String, default: '/logo/logo.jpeg' },
     description: { type: String, default: '' },
     certifications: [{ type: String }],
     socialLinks: [{ label: String, url: String }],

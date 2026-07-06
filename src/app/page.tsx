@@ -1,7 +1,6 @@
 export const dynamic = 'force-dynamic'
 
 import type { Metadata } from 'next'
-import Script from 'next/script'
 import Navbar from '@/components/Navbar'
 import HeroSection from '@/components/HeroSection'
 import WhySection from '@/components/WhySection'
@@ -55,7 +54,7 @@ export default async function Home() {
 
   return (
     <main>
-      <Script id="schema-faq" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <Navbar />
       <HeroSection data={s.hero} />
       <WhySection data={s.why} />

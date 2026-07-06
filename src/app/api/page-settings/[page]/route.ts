@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { connectDB } from '@/lib/mongoose'
 import { PageSettings } from '@/models/PageSettings'
+import { requireAdmin } from '@/lib/auth'
 
 const DEFAULTS: Record<string, Omit<import('@/models/PageSettings').IPageSettings, '_id' | 'page'>> = {
   articles: {
@@ -23,6 +24,9 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ pag
 }
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ page: string }> }) {
+  const denied = await requireAdmin()
+  if (denied) return denied
+
   await connectDB()
   const { page } = await params
   const body = await req.json()

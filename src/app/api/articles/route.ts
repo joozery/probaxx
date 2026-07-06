@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { connectDB } from '@/lib/mongoose'
 import { Article } from '@/models/Article'
+import { requireAdmin } from '@/lib/auth'
 
 export async function GET(req: NextRequest) {
   await connectDB()
@@ -36,6 +37,9 @@ function generateSlug(title: string): string {
 }
 
 export async function POST(req: NextRequest) {
+  const denied = await requireAdmin()
+  if (denied) return denied
+
   await connectDB()
   const body = await req.json()
 

@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Script from 'next/script'
 import Image from 'next/image'
 import Link from 'next/link'
 import CTABanner from '@/components/CTABanner'
@@ -85,7 +84,7 @@ export default async function ArticlesPage({ searchParams }: Props) {
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <Script id="schema-blog" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }} />
       <Navbar />
       {/* Hero Section — about-style left-aligned */}
       {(() => {
