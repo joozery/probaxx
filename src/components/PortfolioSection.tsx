@@ -25,9 +25,21 @@ export default function PortfolioSection({ data }: Props) {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
             {data.clients.map((client, i) => (
               <div key={i} className="group flex flex-col items-center gap-3 p-4 rounded-2xl border border-gray-100 bg-white hover:border-[#f97316]/30 hover:shadow-md transition-all duration-300">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#0a1628] to-[#1e3a5f] flex items-center justify-center flex-shrink-0 group-hover:from-[#f97316] group-hover:to-[#ea6c0a] transition-all duration-300">
-                  <span className="text-white font-black text-lg tracking-tight">{client.abbr}</span>
-                </div>
+                {client.logo ? (
+                  <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-white flex-shrink-0">
+                    <Image
+                      src={client.logo}
+                      alt={client.name}
+                      fill
+                      sizes="56px"
+                      className="object-contain"
+                    />
+                  </div>
+                ) : (
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#0a1628] to-[#1e3a5f] flex items-center justify-center flex-shrink-0 group-hover:from-[#f97316] group-hover:to-[#ea6c0a] transition-all duration-300">
+                    <span className="text-white font-black text-lg tracking-tight">{client.abbr}</span>
+                  </div>
+                )}
                 <div className="text-center">
                   <p className="text-[#0a1628] font-semibold text-xs leading-tight mb-0.5">{client.name}</p>
                   <p className="text-gray-400 text-[10px]">{client.clientType}</p>
@@ -35,7 +47,6 @@ export default function PortfolioSection({ data }: Props) {
               </div>
             ))}
           </div>
-          <p className="text-center text-gray-300 text-xs mt-6">* รอใส่ logo จริงจากลูกค้า</p>
         </div>
 
         {/* 2. Gallery Grid */}

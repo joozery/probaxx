@@ -22,7 +22,7 @@ export interface IServicesSettings extends Document {
   }
   portfolio: {
     sectionTitle: string
-    clients: Array<{ name: string; clientType: string; abbr: string }>
+    clients: Array<{ name: string; clientType: string; abbr: string; logo: string }>
     gallery: Array<{ src: string; alt: string }>
     caseStudy: {
       image: string
@@ -92,7 +92,7 @@ const ServicesSettingsSchema = new Schema<IServicesSettings>(
     portfolio: {
       sectionTitle: { type: String, default: 'ผลงานที่ผ่านมา' },
       clients: {
-        type: [{ name: String, clientType: String, abbr: String }],
+        type: [{ name: String, clientType: String, abbr: String, logo: { type: String, default: '' } }],
         default: [
           { name: 'โรงแรมทวินโลตัส', clientType: 'โรงแรม & รีสอร์ท', abbr: 'TL' },
           { name: 'นิคมอุตสาหกรรมภาคใต้', clientType: 'โรงงานอุตสาหกรรม', abbr: 'SI' },

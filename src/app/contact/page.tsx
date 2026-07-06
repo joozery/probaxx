@@ -2,14 +2,27 @@ import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import Image from 'next/image'
 import ContactForm from './ContactForm'
+import { connectDB } from '@/lib/mongoose'
+import { ContactSettings, type IContactSettings } from '@/models/ContactSettings'
 
-const PHONE = '085-556-4994'
-const PHONE_RAW = '0855564994'
-const LINE_ID = '@probax'
-const EMAIL = 'contact@probax.co.th'
-const ADDRESS = '155/10 หมู่ที่ 3 ต.บ้านโพธิ์ อ.เมืองตรัง จ.ตรัง 92000'
+export const dynamic = 'force-dynamic'
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  await connectDB()
+  let raw = await ContactSettings.findOne().lean()
+  if (!raw) {
+    const doc = new ContactSettings({})
+    await doc.save()
+    raw = doc.toObject()
+  }
+  const s = JSON.parse(JSON.stringify(raw)) as unknown as IContactSettings
+
+  const PHONE = s.info.phone
+  const PHONE_RAW = s.info.phone.replace(/\D/g, '')
+  const LINE_ID = s.info.lineId
+  const EMAIL = s.info.email
+  const ADDRESS = s.info.address
+
   return (
     <main className="bg-[#f2f8fc] min-h-screen">
       <Navbar />
@@ -18,7 +31,7 @@ export default function ContactPage() {
       <div className="relative pt-28 md:pt-36 pb-16 md:pb-20 overflow-hidden bg-[#001b3a]">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/cover/contact_hero.png"
+            src={s.hero.image}
             alt="Contact PRO BAX"
             fill
             className="object-cover object-center"
@@ -34,13 +47,13 @@ export default function ContactPage() {
                   <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
                 </svg>
               </div>
-              <span className="text-white text-xs font-bold tracking-widest uppercase">GET IN TOUCH</span>
+              <span className="text-white text-xs font-bold tracking-widest uppercase">{s.hero.badge}</span>
             </div>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-3">
-              ติดต่อเรา
+              {s.hero.title}
             </h1>
             <p className="text-gray-300 text-sm md:text-base leading-relaxed max-w-xl mb-5">
-              ทีมงาน PRO BAX พร้อมให้คำปรึกษา ประเมินราคา และให้บริการแก้ไขปัญหาระบบน้ำแบบครบวงจร ทักมาคุยกับเราได้เลยครับ
+              {s.hero.description}
             </p>
             <div className="flex flex-wrap gap-3">
               <a
@@ -72,7 +85,7 @@ export default function ContactPage() {
       <div className="bg-[#0a1628] py-4 sticky top-16 md:top-20 z-30 shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap gap-4 items-center justify-between">
           <p className="text-white/70 text-sm hidden sm:block">
-            ต้องการความช่วยเหลือด่วน? เราพร้อมตอบทุกวัน จ.–ส. 08:00–17:00 น.
+            {s.quickBar.text}
           </p>
           <div className="flex gap-3 flex-wrap">
             <a href={`tel:${PHONE_RAW}`} className="flex items-center gap-1.5 text-white text-sm font-semibold hover:text-[#f97316] transition-colors">
@@ -114,7 +127,9 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-0.5">เบอร์โทรศัพท์</h4>
-                      <p className="text-base font-bold text-[#0a1628] group-hover:text-[#1d4ed8] transition-colors">{PHONE} (ก้อง)</p>
+                      <p className="text-base font-bold text-[#0a1628] group-hover:text-[#1d4ed8] transition-colors">
+                        {PHONE}{s.info.phoneContactName && ` (${s.info.phoneContactName})`}
+                      </p>
                     </div>
                   </a>
 
@@ -155,7 +170,7 @@ export default function ContactPage() {
                     <div>
                       <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-0.5">ที่อยู่</h4>
                       <p className="text-sm font-semibold text-[#0a1628] leading-relaxed">{ADDRESS}</p>
-                      <p className="text-xs text-gray-400 mt-0.5">บริษัท มั่นคงวอเตอร์ซัพพลายส์ จำกัด</p>
+                      {s.info.companyName && <p className="text-xs text-gray-400 mt-0.5">{s.info.companyName}</p>}
                     </div>
                   </div>
 
@@ -168,8 +183,8 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-0.5">เวลาทำการ</h4>
-                      <p className="text-sm font-semibold text-[#0a1628]">จันทร์ – เสาร์: 08:00 – 17:00 น.</p>
-                      <p className="text-xs text-gray-400 mt-0.5">หยุดวันอาทิตย์และวันหยุดนักขัตฤกษ์</p>
+                      <p className="text-sm font-semibold text-[#0a1628]">{s.info.hoursLine1}</p>
+                      {s.info.hoursLine2 && <p className="text-xs text-gray-400 mt-0.5">{s.info.hoursLine2}</p>}
                     </div>
                   </div>
                 </div>
@@ -215,10 +230,10 @@ export default function ContactPage() {
       <section className="bg-[#0a1628] py-10 md:py-12">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-2">
-            พร้อมเริ่มต้นดูแลระบบน้ำของคุณ?
+            {s.cta.title}
           </h2>
           <p className="text-gray-400 text-sm md:text-base mb-6 max-w-xl mx-auto">
-            ขอรับคำปรึกษาฟรี ทีมงาน PRO BAX พร้อมออกสำรวจและประเมินราคาให้ถึงที่โดยไม่มีค่าใช้จ่าย
+            {s.cta.description}
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <a

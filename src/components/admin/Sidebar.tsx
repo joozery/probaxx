@@ -15,6 +15,9 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   LayoutTemplate,
+  Info,
+  Trophy,
+  Phone,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -24,6 +27,9 @@ const navItems = [
   { label: 'ใบเสนอราคา', href: '/admin/quotes', icon: ClipboardList, badge: 2 },
   { label: 'บทความ', href: '/admin/articles', icon: FileText },
   { label: 'บริการ', href: '/admin/services', icon: Wrench },
+  { label: 'เกี่ยวกับเรา', href: '/admin/about', icon: Info },
+  { label: 'ผลงาน', href: '/admin/portfolio', icon: Trophy },
+  { label: 'ติดต่อเรา', href: '/admin/contact', icon: Phone },
   { label: 'Footer', href: '/admin/footer', icon: LayoutTemplate },
 ]
 
