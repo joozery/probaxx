@@ -69,7 +69,7 @@ export default function FloatingContact() {
     >
       <div
         className={cn(
-          'flex flex-col overflow-hidden bg-white/95 backdrop-blur shadow-[0_8px_30px_rgba(0,0,0,0.18)] ring-1 ring-black/5 divide-y divide-black/5',
+          'group/widget flex flex-col overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.18)] ring-1 ring-black/5 divide-y divide-black/5',
           isLeft ? 'rounded-r-2xl' : 'rounded-l-2xl'
         )}
       >
@@ -84,27 +84,29 @@ export default function FloatingContact() {
               rel="noopener noreferrer"
               title={meta.label}
               aria-label={meta.label}
-              className={cn('group relative flex items-center', isLeft ? 'flex-row' : 'flex-row-reverse')}
+              className={cn(
+                'group relative flex items-center w-full transition-all duration-300',
+                isLeft ? 'flex-row' : 'flex-row-reverse'
+              )}
+              style={{ backgroundColor: meta.color }}
             >
               {/* Icon button — always visible, flush to the edge */}
               <span
                 className="relative z-10 w-12 h-12 sm:w-[52px] sm:h-[52px] flex items-center justify-center text-white shrink-0 transition-transform duration-200 group-hover:scale-110"
-                style={{ backgroundColor: meta.color }}
               >
                 <ChannelIcon type={c.type} />
               </span>
 
-              {/* Label — slides out from behind the button on hover/focus */}
+              {/* Label — slides out from behind the button on hover of the ENTIRE widget */}
               <span
                 className={cn(
                   'block overflow-hidden transition-all duration-300 ease-out',
-                  'max-w-0 opacity-0 group-hover:max-w-[220px] group-hover:opacity-100 group-focus-visible:max-w-[220px] group-focus-visible:opacity-100'
+                  'max-w-0 opacity-0 group-hover/widget:max-w-[220px] group-hover/widget:opacity-100 group-focus-visible/widget:max-w-[220px] group-focus-visible/widget:opacity-100'
                 )}
-                style={{ backgroundColor: meta.color }}
               >
                 <span className={cn(
                   'flex items-center h-12 sm:h-[52px] px-4 text-sm font-semibold text-white whitespace-nowrap',
-                  isLeft ? 'justify-end' : 'justify-start'
+                  isLeft ? 'justify-start' : 'justify-end'
                 )}>
                   {meta.label}
                 </span>
