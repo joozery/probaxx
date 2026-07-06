@@ -105,10 +105,13 @@ export default function FloatingContact() {
                 )}
               >
                 <span className={cn(
-                  'flex items-center h-12 sm:h-[52px] px-4 text-sm font-semibold text-white whitespace-nowrap',
+                  'flex items-center gap-1.5 h-12 sm:h-[52px] px-4 text-sm font-semibold text-white whitespace-nowrap',
                   isLeft ? 'justify-start' : 'justify-end'
                 )}>
-                  {meta.label}
+                  <span>{meta.label}</span>
+                  {c.value && !/^https?:\/\//i.test(c.value) && (
+                    <span className="opacity-90 font-medium">{c.value}</span>
+                  )}
                 </span>
               </span>
             </a>
