@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
 
 /* ─── Types ──────────────────────────────────────────────────── */
 interface SettingsState {
-  hero: { badge: string; title1: string; title2: string; title2Orange: string; title3: string; subtitle: string; image: string; features: Array<{ label: string }> }
+  hero: { badge: string; title1: string; title2: string; title2Orange: string; title3: string; subtitle: string; image: string; features: Array<{ label: string }>; showVideo: boolean; videoUrl: string }
   why: { badge: string; title1: string; titleOrange: string; title3: string; description: string; image: string; stats: Array<{ value: string; label: string }>; cards: Array<{ title: string; desc: string }> }
   symptoms: { badge: string; title1: string; titleOrange: string; title3: string; description: string; infoTitle: string; infoDesc: string; items: Array<{ image: string; title: string; desc: string }> }
   process: { title: string; titleOrange: string; steps: Array<{ title: string; desc: string }> }
@@ -20,7 +20,7 @@ interface SettingsState {
 }
 
 const DEFAULTS: SettingsState = {
-  hero: { badge: '', title1: '', title2: '', title2Orange: '', title3: '', subtitle: '', image: '', features: [] },
+  hero: { badge: '', title1: '', title2: '', title2Orange: '', title3: '', subtitle: '', image: '', features: [], showVideo: false, videoUrl: '' },
   why: { badge: '', title1: '', titleOrange: '', title3: '', description: '', image: '', stats: [], cards: [] },
   symptoms: { badge: '', title1: '', titleOrange: '', title3: '', description: '', infoTitle: '', infoDesc: '', items: [] },
   process: { title: '', titleOrange: '', steps: [] },
@@ -241,6 +241,23 @@ export default function HomeSettingsPage() {
               <ImageUpload value={settings.hero.image} onChange={v => upH('image', v)} />
             </Card>
           </div>
+
+          <Card title="ปุ่มวิดีโอบริการ">
+            <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-100">
+              <div>
+                <span className="text-sm font-semibold text-gray-700 block">เปิดใช้งานปุ่มวิดีโอ</span>
+                <span className="text-[11px] text-gray-400">แสดง/ซ่อนปุ่ม "ดูวิดีโอบริการ"</span>
+              </div>
+              <button
+                onClick={() => upH('showVideo', !settings.hero.showVideo)}
+                className={cn('relative w-11 h-6 rounded-full transition-colors', settings.hero.showVideo ? 'bg-emerald-500' : 'bg-gray-200')}
+              >
+                <span className={cn('absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-all', settings.hero.showVideo ? 'left-6' : 'left-1')} />
+              </button>
+            </div>
+            <Field label="ลิงก์วิดีโอ (YouTube หรือลิงก์ที่ฝังได้)" value={settings.hero.videoUrl || ''} onChange={v => upH('videoUrl', v)} placeholder="https://www.youtube.com/embed/..." />
+            <p className="text-[11px] text-gray-400 mt-2">แนะนำให้ใช้ลิงก์แบบ Embed (เช่น https://www.youtube.com/embed/xxxxx) เพื่อให้เล่นบนหน้าเว็บได้สมบูรณ์</p>
+          </Card>
 
           <Card title="จุดเด่นใต้หัวข้อ" right={<Count n={settings.hero.features.length} unit="รายการ" />}>
             <div className="space-y-2">

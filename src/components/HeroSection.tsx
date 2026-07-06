@@ -1,6 +1,6 @@
 'use client'
 import Image from 'next/image'
-import Link from 'next/link'
+import { useState } from 'react'
 import { useQuote } from '@/context/QuoteContext'
 import type { IHomeSettings } from '@/models/HomeSettings'
 
@@ -29,81 +29,125 @@ const featureIcons = [
 
 export default function HeroSection({ data }: { data: IHomeSettings['hero'] }) {
   const { openQuote } = useQuote()
+  const [isVideoOpen, setIsVideoOpen] = useState(false)
+
   return (
-    <section id="home" className="relative h-[80vh] flex items-center pt-16 md:pt-20 overflow-hidden">
-      {/* Background Image */}
-      <div className="absolute inset-0">
-        <Image
-          src={data.image}
-          alt="PROBAX Water Tank Cleaning"
-          fill
-          sizes="100vw"
-          className="object-cover object-center"
-          priority
-        />
-        {/* Gradient overlay - dark on left, fade to transparent on right */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628]/90 via-[#0a1628]/70 to-[#0a1628]/20" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/60 via-transparent to-transparent" />
-      </div>
+    <>
+      <section id="home" className="relative min-h-[90vh] lg:min-h-screen flex items-center pt-24 pb-16 overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <Image
+            src={data.image}
+            alt="PROBAX Water Tank Cleaning"
+            fill
+            sizes="100vw"
+            className="object-cover object-center"
+            priority
+          />
+          {/* Gradient overlay - dark on left, fade to transparent on right */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628]/95 via-[#0a1628]/80 to-[#0a1628]/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/80 via-transparent to-transparent" />
+        </div>
 
-      {/* Content */}
-      <div className="relative z-10 w-full px-6 sm:px-10 lg:px-16 py-20 md:py-28">
-        <div className="max-w-2xl">
-          {/* Label */}
-          <div className="flex items-center gap-2 mb-5">
-            <div className="w-8 h-0.5 bg-[#f97316]" />
-            <span className="text-[#f97316] text-sm font-semibold tracking-widest uppercase">
-              {data.badge}
-            </span>
-          </div>
+        {/* Content */}
+        <div className="relative z-10 w-full px-6 sm:px-10 lg:px-16 py-12 md:py-20">
+          <div className="max-w-3xl">
+            {/* Label */}
+            <div className="flex items-center gap-2 mb-4 md:mb-6">
+              <div className="w-8 h-0.5 bg-[#f97316]" />
+              <span className="text-[#f97316] text-xs sm:text-sm font-semibold tracking-widest uppercase">
+                {data.badge}
+              </span>
+            </div>
 
-          {/* Title */}
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.1] mb-5">
-            {data.title1}
-            <br />
-            {data.title2}
-            <span className="text-[#f97316]">{data.title2Orange}</span>
-            <br />
-            {data.title3}
-          </h1>
+            {/* Title */}
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.15] mb-5 md:mb-7">
+              {data.title1}
+              <br />
+              {data.title2}
+              <span className="text-[#f97316]">{data.title2Orange}</span>
+              <br />
+              {data.title3}
+            </h1>
 
-          {/* Subtitle */}
-          <p className="text-white/80 text-base md:text-lg mb-8">
-            {data.subtitle}
-          </p>
+            {/* Subtitle */}
+            <p className="text-white/80 text-sm sm:text-base md:text-lg mb-8 md:mb-10 max-w-2xl leading-relaxed">
+              {data.subtitle}
+            </p>
 
-          {/* Feature Icons */}
-          <div className="flex flex-wrap gap-x-8 gap-y-4 mb-10">
-            {data.features.map((f, i) => (
-              <div key={i} className="flex flex-col items-center gap-1.5 text-center min-w-[72px] max-w-[120px]">
-                <div className="text-white/90">{featureIcons[i % featureIcons.length]}</div>
-                <p className="text-white/70 text-xs leading-tight">{f.label}</p>
-              </div>
-            ))}
-          </div>
+            {/* Feature Icons */}
+            <div className="flex flex-wrap gap-x-6 sm:gap-x-8 gap-y-6 mb-10 md:mb-12">
+              {data.features.map((f, i) => (
+                <div key={i} className="flex flex-col items-center gap-2 text-center min-w-[72px] max-w-[100px] sm:max-w-[120px]">
+                  <div className="text-white/90">{featureIcons[i % featureIcons.length]}</div>
+                  <p className="text-white/70 text-[10px] sm:text-xs leading-tight">{f.label}</p>
+                </div>
+              ))}
+            </div>
 
-          {/* Buttons */}
-          <div className="flex flex-wrap items-center gap-4">
-            <button
-              onClick={openQuote}
-              className="inline-flex items-center gap-2 bg-[#f97316] hover:bg-[#ea6c0a] text-white font-semibold px-7 py-3.5 rounded-lg transition-all hover:scale-105 shadow-lg shadow-orange-500/30"
-            >
-              ขอใบเสนอราคา
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </button>
-            <button className="inline-flex items-center gap-3 text-white font-medium hover:text-[#f97316] transition-colors group">
-              <div className="w-11 h-11 rounded-full border-2 border-white/60 flex items-center justify-center group-hover:border-[#f97316] transition-colors">
-                <svg className="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8 5v14l11-7z" />
+            {/* Buttons */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-6">
+              <button
+                onClick={openQuote}
+                className="inline-flex items-center justify-center gap-2 bg-[#f97316] hover:bg-[#ea6c0a] text-white font-semibold px-8 py-4 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-orange-500/25 w-full sm:w-auto"
+              >
+                ขอใบเสนอราคา
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
-              </div>
-              ดูวิดีโอบริการ
-            </button>
+              </button>
+              
+              {data.showVideo && data.videoUrl && (
+                <button 
+                  onClick={() => setIsVideoOpen(true)}
+                  className="inline-flex items-center justify-center gap-3 text-white font-medium hover:text-[#f97316] transition-colors group w-full sm:w-auto py-2"
+                >
+                  <div className="w-12 h-12 rounded-full bg-white/10 border-2 border-white/60 flex items-center justify-center group-hover:border-[#f97316] group-hover:bg-[#f97316]/10 transition-all">
+                    <svg className="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+                  ดูวิดีโอบริการ
+                </button>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Video Modal */}
+      {isVideoOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/90 backdrop-blur-sm">
+          <button 
+            onClick={() => setIsVideoOpen(false)}
+            className="absolute top-4 right-4 sm:top-6 sm:right-6 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          
+          <div className="w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl relative ring-1 ring-white/10">
+            {data.videoUrl ? (
+              <iframe
+                src={data.videoUrl.includes('youtube.com/watch') 
+                  ? data.videoUrl.replace('watch?v=', 'embed/') + '?autoplay=1'
+                  : data.videoUrl.includes('youtu.be') 
+                    ? data.videoUrl.replace('youtu.be/', 'youtube.com/embed/') + '?autoplay=1'
+                    : data.videoUrl + (data.videoUrl.includes('?') ? '&autoplay=1' : '?autoplay=1')}
+                title="Service Video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full"
+              />
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center text-white/50">
+                ยังไม่ได้กำหนดลิงก์วิดีโอ
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   )
 }

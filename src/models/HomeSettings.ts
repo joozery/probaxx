@@ -10,6 +10,8 @@ export interface IHomeSettings extends Document {
     subtitle: string
     image: string
     features: Array<{ label: string }>
+    showVideo: boolean
+    videoUrl: string
   }
   why: {
     badge: string
@@ -68,6 +70,8 @@ const HomeSettingsSchema = new Schema<IHomeSettings>(
       title3: { type: String, default: 'CLEANING' },
       subtitle: { type: String, default: 'ผู้เชี่ยวชาญงานล้างถังเก็บน้ำและถังบำบัดน้ำเสีย' },
       image: { type: String, default: '/cover/cover.png' },
+      showVideo: { type: Boolean, default: false },
+      videoUrl: { type: String, default: '' },
       features: {
         type: [{ label: String }],
         default: [
