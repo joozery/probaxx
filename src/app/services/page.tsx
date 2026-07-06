@@ -1,3 +1,5 @@
+import type { Metadata } from 'next'
+import Script from 'next/script'
 import Navbar from '@/components/Navbar'
 import ServicesHero from '@/components/ServicesHero'
 import ServicesSection from '@/components/ServicesSection'
@@ -10,6 +12,31 @@ import { ServicesSettings, type IServicesSettings } from '@/models/ServicesSetti
 import { PortfolioSettings, type IPortfolioSettings } from '@/models/PortfolioSettings'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  title: 'บริการล้างถังเก็บน้ำ ถังบำบัดน้ำเสีย ภาคใต้ (สงขลา หาดใหญ่ ภูเก็ต) | PROBAX',
+  description: 'บริการครบวงจรของ PROBAX ล้างถังเก็บน้ำ ล้างถังบำบัดน้ำเสีย ล้างท่อ ทำความสะอาดบ่อดักไขมัน ด้วยทีมช่างมืออาชีพ มาตรฐานความปลอดภัยสูงสุด ทั่วภาคใต้ สงขลา หาดใหญ่ ภูเก็ต สุราษฎร์ธานี',
+  keywords: ['บริการล้างถังเก็บน้ำ', 'ล้างถังเก็บน้ำ ภาคใต้', 'ล้างถังเก็บน้ำใต้ดิน', 'ล้างถังน้ำสแตนเลส', 'ล้างถังบำบัดน้ำเสีย', 'ทำความสะอาดบ่อดักไขมัน', 'สงขลา', 'หาดใหญ่', 'ภูเก็ต'],
+}
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "บริการทำความสะอาดถังเก็บน้ำและบำบัดน้ำเสียภาคใต้",
+  "provider": {
+    "@type": "LocalBusiness",
+    "name": "PROBAX"
+  },
+  "areaServed": [
+    { "@type": "State", "name": "ภาคใต้" },
+    { "@type": "City", "name": "สงขลา" },
+    { "@type": "City", "name": "หาดใหญ่" },
+    { "@type": "City", "name": "ภูเก็ต" },
+    { "@type": "City", "name": "สุราษฎร์ธานี" }
+  ],
+  "description": "บริการทำความสะอาด ล้างถังเก็บน้ำ ถังบำบัดน้ำเสีย และล้างท่อสำหรับบ้าน อาคาร โรงงานอุตสาหกรรม ครอบคลุมทั่วภาคใต้",
+  "serviceType": "Water Tank Cleaning"
+}
 
 export default async function ServicesPage() {
   await connectDB()
@@ -38,6 +65,7 @@ export default async function ServicesPage() {
 
   return (
     <main>
+      <Script id="schema-service" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }} />
       <Navbar />
       <ServicesHero data={settings.hero} />
       <ServicesSection data={settings.services} />

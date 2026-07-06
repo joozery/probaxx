@@ -1,3 +1,5 @@
+import type { Metadata } from 'next'
+import Script from 'next/script'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import Image from 'next/image'
@@ -5,6 +7,24 @@ import { connectDB } from '@/lib/mongoose'
 import { AboutSettings, type IAboutSettings } from '@/models/AboutSettings'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  title: 'เกี่ยวกับเรา PROBAX | ผู้เชี่ยวชาญทำความสะอาดภาคใต้',
+  description: 'รู้จักกับ PROBAX ทีมงานมืออาชีพผู้เชี่ยวชาญด้านการล้างถังเก็บน้ำและระบบบำบัดน้ำเสีย ประสบการณ์ยาวนาน บริการด้วยใจ ครอบคลุมพื้นที่สงขลา หาดใหญ่ ภูเก็ต และทั่วภาคใต้',
+  keywords: ['เกี่ยวกับ PROBAX', 'ทีมงานทำความสะอาด', 'ผู้เชี่ยวชาญล้างถังน้ำ', 'บริษัทรับทำความสะอาด ภาคใต้', 'โปรแบค สงขลา'],
+}
+
+const aboutSchema = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "name": "เกี่ยวกับ PROBAX",
+  "description": "รู้จักกับทีมงาน PROBAX ผู้เชี่ยวชาญด้านการล้างถังเก็บน้ำและทำความสะอาดอุตสาหกรรมในภาคใต้",
+  "mainEntity": {
+    "@type": "Organization",
+    "name": "PROBAX",
+    "areaServed": "ภาคใต้ ประเทศไทย"
+  }
+}
 
 const whyIcons = [
   'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z',
@@ -36,6 +56,7 @@ export default async function AboutPage() {
 
   return (
     <main>
+      <Script id="schema-about" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }} />
       <Navbar />
 
       {/* Hero Section */}

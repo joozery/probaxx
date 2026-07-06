@@ -1,3 +1,5 @@
+import type { Metadata } from 'next'
+import Script from 'next/script'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import Image from 'next/image'
@@ -6,6 +8,25 @@ import { connectDB } from '@/lib/mongoose'
 import { ContactSettings, type IContactSettings } from '@/models/ContactSettings'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  title: 'ติดต่อเรา | PROBAX บริการทำความสะอาด ภาคใต้ (สงขลา หาดใหญ่)',
+  description: 'ติดต่อทีมงาน PROBAX สอบถามประเมินราคาล้างถังเก็บน้ำ ถังบำบัดน้ำเสีย และทำความสะอาดอุตสาหกรรมในพื้นที่ภาคใต้ สงขลา หาดใหญ่ ภูเก็ต สุราษฎร์ธานี ยินดีให้คำปรึกษาฟรี',
+  keywords: ['ติดต่อ PROBAX', 'เบอร์โทรศัพท์ PROBAX', 'ล้างถังเก็บน้ำ สงขลา', 'ล้างถังน้ำ หาดใหญ่', 'สอบถามราคาล้างถัง'],
+}
+
+const contactSchema = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "name": "ติดต่อ PROBAX",
+  "description": "ติดต่อสอบถามบริการทำความสะอาดล้างถังเก็บน้ำ",
+  "mainEntity": {
+    "@type": "LocalBusiness",
+    "name": "PROBAX",
+    "telephone": "080-000-0000",
+    "areaServed": "ภาคใต้ ประเทศไทย"
+  }
+}
 
 export default async function ContactPage() {
   await connectDB()
@@ -25,6 +46,7 @@ export default async function ContactPage() {
 
   return (
     <main className="bg-[#f2f8fc] min-h-screen">
+      <Script id="schema-contact" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(contactSchema) }} />
       <Navbar />
 
       {/* ── Hero ── */}

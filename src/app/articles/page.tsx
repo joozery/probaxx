@@ -9,14 +9,29 @@ import { HomeSettings, type IHomeSettings } from '@/models/HomeSettings'
 import { Article, IArticle } from '@/models/Article'
 import { PageSettings } from '@/models/PageSettings'
 
+import Script from 'next/script'
+import type { Metadata } from 'next'
+
 export const metadata: Metadata = {
-  title: 'บทความ & ข่าวสาร | PROBAX',
-  description: 'รวบรวมสาระความรู้เกี่ยวกับการดูแลรักษาระบบน้ำ ถังเก็บน้ำ และสุขภาพที่คุณควรรู้',
+  title: 'บทความ & ข่าวสาร | สาระความรู้เรื่องถังเก็บน้ำ PROBAX',
+  description: 'รวมสาระน่ารู้ เคล็ดลับการดูแลถังเก็บน้ำ ถังน้ำสแตนเลส ถังบำบัดน้ำเสีย และข่าวสารโปรโมชันจาก PROBAX ผู้เชี่ยวชาญทำความสะอาดภาคใต้',
+  keywords: ['บทความทำความสะอาด', 'ดูแลถังเก็บน้ำ', 'วิธีล้างถังน้ำ', 'PROBAX News', 'ความรู้เรื่องน้ำ'],
   openGraph: {
-    title: 'บทความ & ข่าวสาร | PROBAX',
-    description: 'รวบรวมสาระความรู้เกี่ยวกับการดูแลรักษาระบบน้ำ ถังเก็บน้ำ และสุขภาพที่คุณควรรู้',
+    title: 'บทความ & ข่าวสาร | สาระความรู้เรื่องถังเก็บน้ำ PROBAX',
+    description: 'รวมสาระน่ารู้ เคล็ดลับการดูแลถังเก็บน้ำ และข่าวสารโปรโมชันจาก PROBAX ผู้เชี่ยวชาญทำความสะอาดภาคใต้',
     type: 'website',
   },
+}
+
+const blogSchema = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "บทความและสาระน่ารู้ PROBAX",
+  "description": "รวมบทความเกี่ยวกับการดูแลถังเก็บน้ำและระบบน้ำโดยผู้เชี่ยวชาญ",
+  "publisher": {
+    "@type": "Organization",
+    "name": "PROBAX"
+  }
 }
 
 const CAT_COLORS: Record<string, string> = {
@@ -72,6 +87,7 @@ export default async function ArticlesPage({ searchParams }: Props) {
 
   return (
     <main className="min-h-screen bg-gray-50">
+      <Script id="schema-blog" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }} />
       <Navbar />
       {/* Hero Section — about-style left-aligned */}
       {(() => {

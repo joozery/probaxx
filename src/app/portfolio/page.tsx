@@ -6,13 +6,26 @@ import { QuoteProvider } from '@/context/QuoteContext'
 import PortfolioClient from './PortfolioClient'
 import { connectDB } from '@/lib/mongoose'
 import { PortfolioSettings, type IPortfolioSettings } from '@/models/PortfolioSettings'
+import Script from 'next/script'
 import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'ผลงานของเรา | PROBAX',
-  description: 'ผลงานการล้างถังเก็บน้ำ ติดตั้งระบบน้ำ และบำบัดน้ำเสียจาก PROBAX กว่า 500 โครงการทั่วภาคใต้',
+  title: 'ผลงานของเรา | ภาพผลงานล้างถังเก็บน้ำภาคใต้ PROBAX',
+  description: 'รวมภาพผลงานการให้บริการล้างถังเก็บน้ำ ติดตั้งระบบน้ำ และบำบัดน้ำเสีย จาก PROBAX กว่า 500 โครงการทั่วภาคใต้ หาดใหญ่ สงขลา ภูเก็ต สุราษฎร์ธานี สร้างความมั่นใจให้ลูกค้าทุกท่าน',
+  keywords: ['ผลงานล้างถังเก็บน้ำ', 'รีวิว PROBAX', 'ล้างถังน้ำ หาดใหญ่', 'ผลงานทำความสะอาด ภาคใต้'],
+}
+
+const portfolioSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "ผลงานทำความสะอาดถังเก็บน้ำ PROBAX",
+  "description": "รวมผลงานและภาพถ่ายการให้บริการล้างถังเก็บน้ำ ถังบำบัดน้ำเสียในพื้นที่ภาคใต้",
+  "publisher": {
+    "@type": "Organization",
+    "name": "PROBAX"
+  }
 }
 
 export default async function PortfolioPage() {
@@ -28,6 +41,7 @@ export default async function PortfolioPage() {
   return (
     <QuoteProvider>
       <main className="min-h-screen bg-white">
+        <Script id="schema-portfolio" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(portfolioSchema) }} />
         <Navbar />
         <QuoteModal />
 
