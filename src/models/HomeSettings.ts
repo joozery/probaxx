@@ -36,7 +36,7 @@ export interface IHomeSettings extends Document {
   process: {
     title: string
     titleOrange: string
-    steps: Array<{ title: string; desc: string }>
+    steps: Array<{ icon?: string; title: string; desc: string }>
   }
   trust: {
     badge: string
@@ -129,14 +129,14 @@ const HomeSettingsSchema = new Schema<IHomeSettings>(
       title: { type: String, default: 'มาตรฐานการให้บริการ' },
       titleOrange: { type: String, default: 'ของเรา' },
       steps: {
-        type: [{ title: String, desc: String }],
+        type: [{ icon: String, title: String, desc: String }],
         default: [
-          { title: 'ประเมินหน้างาน', desc: 'สำรวจหน้างานและ ตรวจสอบอุปกรณ์เบื้องต้น' },
-          { title: 'วางแผนการทำงาน', desc: 'วางแผนและเตรียมอุปกรณ์ สารเคมีและอุปกรณ์ล้าง' },
-          { title: 'ล้างทำความสะอาด', desc: 'ล้างตะกอน สิ่งปนเปื้อน และสิ่งปนเปื้อนอย่างละเอียด' },
-          { title: 'ตรวจสอบคุณภาพน้ำ', desc: 'ตรวจสอบคุณภาพน้ำ ก่อน-หลังล้าง' },
-          { title: 'สรุปรายงานผล', desc: 'สรุปรายงานผล พร้อมรายงานการตรวจสอบ' },
-          { title: 'บริการหลังการขาย', desc: 'ติดตามผล แก้ไขปัญหา และพร้อมให้บริการ' },
+          { icon: '', title: 'ประเมินหน้างาน', desc: 'สำรวจหน้างานและ ตรวจสอบอุปกรณ์เบื้องต้น' },
+          { icon: '', title: 'วางแผนการทำงาน', desc: 'วางแผนและเตรียมอุปกรณ์ สารเคมีและอุปกรณ์ล้าง' },
+          { icon: '', title: 'ล้างทำความสะอาด', desc: 'ล้างตะกอน สิ่งปนเปื้อน และสิ่งปนเปื้อนอย่างละเอียด' },
+          { icon: '', title: 'ตรวจสอบคุณภาพน้ำ', desc: 'ตรวจสอบคุณภาพน้ำ ก่อน-หลังล้าง' },
+          { icon: '', title: 'สรุปรายงานผล', desc: 'สรุปรายงานผล พร้อมรายงานการตรวจสอบ' },
+          { icon: '', title: 'บริการหลังการขาย', desc: 'ติดตามผล แก้ไขปัญหา และพร้อมให้บริการ' },
         ],
       },
     },

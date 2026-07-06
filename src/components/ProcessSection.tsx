@@ -60,8 +60,12 @@ export default function ProcessSection({ data }: { data: IHomeSettings['process'
                 </div>
               )}
               {/* Icon circle */}
-              <div className="w-20 h-20 rounded-full border-2 border-gray-200 bg-white flex items-center justify-center text-[#0a1628] shadow-sm mb-3 group-hover:border-[#f97316] transition-colors">
-                {stepIcons[i % stepIcons.length]}
+              <div className="w-20 h-20 rounded-full border-2 border-gray-200 bg-white flex items-center justify-center text-[#0a1628] shadow-sm mb-3 group-hover:border-[#f97316] transition-colors overflow-hidden">
+                {step.icon ? (
+                  <img src={step.icon} alt={step.title} className="w-10 h-10 object-contain" />
+                ) : (
+                  stepIcons[i % stepIcons.length]
+                )}
               </div>
               <span className="text-[#f97316] font-bold text-sm mb-1">{String(i + 1).padStart(2, '0')}</span>
               <h3 className="text-[#0a1628] font-semibold text-sm mb-1">{step.title}</h3>

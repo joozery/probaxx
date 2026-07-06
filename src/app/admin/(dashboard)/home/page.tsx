@@ -14,7 +14,7 @@ interface SettingsState {
   hero: { badge: string; title1: string; title2: string; title2Orange: string; title3: string; subtitle: string; image: string; features: Array<{ label: string }>; showVideo: boolean; videoUrl: string }
   why: { badge: string; title1: string; titleOrange: string; title3: string; description: string; image: string; stats: Array<{ value: string; label: string }>; cards: Array<{ title: string; desc: string }> }
   symptoms: { badge: string; title1: string; titleOrange: string; title3: string; description: string; infoTitle: string; infoDesc: string; items: Array<{ image: string; title: string; desc: string }> }
-  process: { title: string; titleOrange: string; steps: Array<{ title: string; desc: string }> }
+  process: { title: string; titleOrange: string; steps: Array<{ icon?: string; title: string; desc: string }> }
   trust: { badge: string; title1: string; titleOrange: string; title3: string; description: string; items: Array<{ title: string; desc: string }> }
   cta: { title1: string; titleOrange: string; title3: string; description: string; image: string; features: Array<{ label: string; sub: string }>; hoursLabel: string; hours: string; phone: string; lineId: string }
 }
@@ -374,13 +374,21 @@ export default function HomeSettingsPage() {
                     className="absolute top-3 right-3 p-1.5 rounded-md text-gray-300 hover:text-red-500 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-all">
                     <Trash2 className="w-4 h-4" />
                   </button>
-                  <span className="inline-flex w-6 h-6 rounded-full bg-orange-100 text-orange-600 text-xs font-bold items-center justify-center">{String(i + 1).padStart(2, '0')}</span>
+                  <div className="flex items-center justify-between">
+                    <span className="inline-flex w-6 h-6 rounded-full bg-orange-100 text-orange-600 text-xs font-bold items-center justify-center">{String(i + 1).padStart(2, '0')}</span>
+                  </div>
+                  <div className="w-16 h-16 mx-auto">
+                    <ImageUpload 
+                      value={step.icon || ''} 
+                      onChange={v => upPr('steps', settings.process.steps.map((x, j) => j === i ? { ...x, icon: v } : x))} 
+                    />
+                  </div>
                   <Field label="ชื่อขั้นตอน" value={step.title} onChange={v => upPr('steps', settings.process.steps.map((x, j) => j === i ? { ...x, title: v } : x))} />
                   <Field label="คำอธิบาย" value={step.desc} onChange={v => upPr('steps', settings.process.steps.map((x, j) => j === i ? { ...x, desc: v } : x))} rows={2} />
                 </div>
               ))}
             </div>
-            <Add label="เพิ่มขั้นตอน" onClick={() => upPr('steps', [...settings.process.steps, { title: '', desc: '' }])} />
+            <Add label="เพิ่มขั้นตอน" onClick={() => upPr('steps', [...settings.process.steps, { icon: '', title: '', desc: '' }])} />
           </Card>
         </Tabs.Content>
 
