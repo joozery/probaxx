@@ -21,9 +21,8 @@ export async function POST(req: NextRequest) {
   const file = formData.get('file') as File | null
   if (!file) return NextResponse.json({ error: 'No file' }, { status: 400 })
 
-  const allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml']
-  if (!allowed.includes(file.type)) {
-    return NextResponse.json({ error: 'Invalid file type' }, { status: 400 })
+  if (!file.type.startsWith('image/')) {
+    return NextResponse.json({ error: 'ต้องเป็นไฟล์รูปภาพเท่านั้น (เช่น .png, .jpg)' }, { status: 400 })
   }
 
   const ext = file.name.split('.').pop()

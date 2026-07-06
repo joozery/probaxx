@@ -73,9 +73,11 @@ function ImageUpload({ value, onChange }: { value: string; onChange: (url: strin
     try {
       const fd = new FormData(); fd.append('file', file)
       const res = await fetch('/api/upload', { method: 'POST', body: fd })
-      const { url } = await res.json()
-      if (url) onChange(url)
-    } catch { alert('อัปโหลดไม่สำเร็จ') }
+      const data = await res.json()
+      if (data.url) onChange(data.url)
+      else if (data.error) alert('อัปโหลดล้มเหลว: ' + data.error)
+      else alert('อัปโหลดไม่สำเร็จ')
+    } catch { alert('อัปโหลดไม่สำเร็จ (ระบบเครือข่าย)') }
     setUploading(false); e.target.value = ''
   }
 
@@ -124,9 +126,11 @@ function ClientLogoUpload({ logo, abbr, onChange }: { logo: string; abbr: string
     try {
       const fd = new FormData(); fd.append('file', file)
       const res = await fetch('/api/upload', { method: 'POST', body: fd })
-      const { url } = await res.json()
-      if (url) onChange(url)
-    } catch { alert('อัปโหลดไม่สำเร็จ') }
+      const data = await res.json()
+      if (data.url) onChange(data.url)
+      else if (data.error) alert('อัปโหลดล้มเหลว: ' + data.error)
+      else alert('อัปโหลดไม่สำเร็จ')
+    } catch { alert('อัปโหลดไม่สำเร็จ (ระบบเครือข่าย)') }
     setUploading(false); e.target.value = ''
   }
 
