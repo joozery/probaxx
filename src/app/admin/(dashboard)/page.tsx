@@ -54,20 +54,22 @@ function DonutChart({ segments }: { segments: { value: number; color: string }[]
   )
 }
 
-// ── Mini Line Chart ────────────────────────────────────────────
-function MiniLineChart() {
-  const labels = ['1 วันก่อน', '2 วันก่อน', '3 วันก่อน', '4 วันก่อน', '5 วันก่อน', '6 วันก่อน', 'วันนี้']
-  const series = [
-    { label: 'ใบเสนอราคา', color: '#3b82f6', data: [2, 1, 3, 2, 4, 1, 3] },
-    { label: 'เสร็จสิ้น', color: '#10b981', data: [1, 2, 1, 3, 2, 4, 2] },
-    { label: 'รอการดำเนินการ', color: '#f97316', data: [3, 2, 4, 1, 3, 2, 1] },
-    { label: 'ยกเลิก', color: '#f43f5e', data: [0, 0, 1, 0, 0, 1, 0] },
-  ]
+// ── MiniLineChart ────────────────────────────────────────────
+function MiniLineChart({ labels, series, maxV }: {
+  labels: string[];
+  series: { label: string; color: string; data: number[] }[];
+  maxV: number;
+}) {
   const w = 800, h = 240, pad = { l: 32, r: 12, t: 10, b: 24 }
-  const maxV = 5
-  const xScale = (i: number) => pad.l + (i / (labels.length - 1)) * (w - pad.l - pad.r)
-  const yScale = (v: number) => pad.t + ((maxV - v) / maxV) * (h - pad.t - pad.b)
-  const gridLines = [0, 1, 2, 3, 4, 5]
+  const renderMax = maxV > 5 ? maxV : 5 // At least 5 for grid
+  const xScale = (i: number) => pad.l + (i / (Math.max(1, labels.length - 1))) * (w - pad.l - pad.r)
+  const yScale = (v: number) => pad.t + ((renderMax - v) / renderMax) * (h - pad.t - pad.b)
+  
+  // Calculate grid lines dynamically (max 6 lines)
+  const gridLines = []
+  const step = Math.max(1, Math.ceil(renderMax / 5))
+  for (let i = 0; i <= renderMax; i += step) gridLines.push(i)
+
   return (
     <svg viewBox={`0 0 ${w} ${h}`} className="w-full">
       {/* Grid */}
@@ -124,7 +126,17 @@ export const dynamic = 'force-dynamic' // Ensure page uses fresh data
 export default async function AdminDashboard() {
   await connectDB()
 
-  // Fetch Stats
+  // Prepare dates for the last 7 days
+  const now = new Date()
+  const dates = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(now)
+    d.setDate(d.getDate() - (6 - i))
+    d.setHours(0, 0, 0, 0)
+    return d
+  })
+  const sevenDaysAgo = dates[0]
+
+  // Fetch Stats & Aggregations
   const [
     totalMessages,
     newMessages,
@@ -134,7 +146,10 @@ export default async function AdminDashboard() {
     inprogressQuotes,
     cancelledQuotes,
     totalServices,
-    portfolioSettings
+    portfolioSettings,
+    chartAgg,
+    recentMessagesRaw,
+    recentQuotesRaw
   ] = await Promise.all([
     Message.countDocuments(),
     Message.countDocuments({ status: 'new' }),
@@ -144,14 +159,51 @@ export default async function AdminDashboard() {
     Quote.countDocuments({ status: 'inprogress' }),
     Quote.countDocuments({ status: 'cancelled' }),
     Service.countDocuments(),
-    PortfolioSettings.findOne().lean()
+    PortfolioSettings.findOne().lean(),
+    Quote.aggregate([
+      { $match: { createdAt: { $gte: sevenDaysAgo } } },
+      {
+        $group: {
+          _id: {
+            date: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt", timezone: "Asia/Bangkok" } },
+            status: "$status"
+          },
+          count: { $sum: 1 }
+        }
+      }
+    ]),
+    Message.find().sort({ createdAt: -1 }).limit(5).lean(),
+    Quote.find().sort({ createdAt: -1 }).limit(5).lean()
   ])
 
-  const totalPortfolioItems = portfolioSettings?.items?.length || 0
+  // Build Chart Data
+  const labels = dates.map(d => new Intl.DateTimeFormat('th-TH', { weekday: 'short', day: 'numeric' }).format(d))
+  const formatKey = (d: Date) => d.toLocaleString('sv-SE', { timeZone: 'Asia/Bangkok' }).slice(0, 10) // YYYY-MM-DD
+  
+  const createSeries = (statusKey: string) => {
+    return dates.map(d => {
+      const key = formatKey(d)
+      const found = chartAgg.find((c: any) => c._id.date === key && (c._id.status === statusKey || (!c._id.status && statusKey === 'pending')))
+      return found ? found.count : 0
+    })
+  }
 
-  // Fetch recent data
-  const recentMessagesRaw = await Message.find().sort({ createdAt: -1 }).limit(5).lean()
-  const recentQuotesRaw = await Quote.find().sort({ createdAt: -1 }).limit(5).lean()
+  const seriesPending = createSeries('pending')
+  const seriesDone = createSeries('done')
+  const seriesInprogress = createSeries('inprogress')
+  const seriesCancelled = createSeries('cancelled')
+  
+  const allCounts = [...seriesPending, ...seriesDone, ...seriesInprogress, ...seriesCancelled]
+  const maxV = Math.max(0, ...allCounts)
+
+  const lineSeries = [
+    { label: 'รอมอบหมาย/ติดต่อ', color: '#f97316', data: seriesPending },
+    { label: 'กำลังดำเนินการ', color: '#3b82f6', data: seriesInprogress },
+    { label: 'เสร็จสิ้น', color: '#10b981', data: seriesDone },
+    { label: 'ยกเลิก', color: '#f43f5e', data: seriesCancelled },
+  ]
+
+  const totalPortfolioItems = portfolioSettings?.items?.length || 0
 
   const stats = [
     {
@@ -307,26 +359,21 @@ export default async function AdminDashboard() {
         {/* Line Chart */}
         <div className="xl:col-span-2 bg-white border border-slate-100 rounded-xl shadow-sm p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-bold text-slate-800">สถิติการดำเนินงาน (ข้อมูลตัวอย่าง)</h2>
+            <h2 className="text-sm font-bold text-slate-800">สถิติคำขอใบเสนอราคา (7 วันล่าสุด)</h2>
             <button className="inline-flex items-center gap-1 text-xs font-semibold text-slate-600 border border-slate-200 px-3 py-1.5 rounded-lg hover:bg-slate-50 transition-colors">
               สัปดาห์นี้ <ChevronDown className="w-3.5 h-3.5" />
             </button>
           </div>
           {/* Legend */}
           <div className="flex flex-wrap gap-4 mb-3">
-            {[
-              { label: 'ใบเสนอราคา', color: '#3b82f6' },
-              { label: 'เสร็จสิ้น', color: '#10b981' },
-              { label: 'รอการดำเนินการ', color: '#f97316' },
-              { label: 'ยกเลิก', color: '#f43f5e' },
-            ].map((s) => (
+            {lineSeries.map((s) => (
               <div key={s.label} className="flex items-center gap-1.5">
                 <div className="w-2.5 h-2.5 rounded-full" style={{ background: s.color }} />
                 <span className="text-[11px] text-slate-500 font-medium">{s.label}</span>
               </div>
             ))}
           </div>
-          <MiniLineChart />
+          <MiniLineChart labels={labels} series={lineSeries} maxV={maxV} />
         </div>
 
         {/* Donut Chart */}
