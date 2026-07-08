@@ -73,11 +73,11 @@ export default function WhyServiceSection({ data }: Props) {
 
           {/* Left Text */}
           <div className="lg:w-[45%] xl:w-[40%] bg-white/40 lg:bg-transparent backdrop-blur-sm lg:backdrop-blur-none p-6 lg:p-0 rounded-3xl">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0a1628] leading-tight mb-3">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight mb-3" style={{ color: data.titleColor || '#0a1628' }}>
               {data.title}<br />
-              <span className="text-[#1d4ed8]">{data.titleBlue}</span>
+              <span style={{ color: data.titleBlueColor || '#1d4ed8' }}>{data.titleBlue}</span>
             </h2>
-            <p className="text-gray-600 font-medium text-sm lg:text-base leading-relaxed mb-8 pr-4">
+            <p className="font-medium text-sm lg:text-base leading-relaxed mb-8 pr-4" style={{ color: data.descriptionColor || '#4b5563' }}>
               {data.description}
             </p>
 

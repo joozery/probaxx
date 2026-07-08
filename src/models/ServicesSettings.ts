@@ -3,8 +3,11 @@ import mongoose, { Schema, Document, model, models } from 'mongoose'
 export interface IServicesSettings extends Document {
   hero: {
     title: string
+    titleColor: string
     subtitle: string
+    subtitleColor: string
     description: string
+    descriptionColor: string
     image: string
     features: Array<{ title: string; desc: string }>
   }
@@ -14,8 +17,11 @@ export interface IServicesSettings extends Document {
   }
   why: {
     title: string
+    titleColor: string
     titleBlue: string
+    titleBlueColor: string
     description: string
+    descriptionColor: string
     image: string
     symptoms: Array<{ label: string }>
     benefits: Array<{ title: string; desc: string }>
@@ -33,6 +39,10 @@ export interface IServicesSettings extends Document {
     }
   }
   faq: {
+    heading: string
+    headingColor: string
+    questionColor: string
+    answerColor: string
     items: Array<{ question: string; answer: string }>
   }
 }
@@ -41,8 +51,11 @@ const ServicesSettingsSchema = new Schema<IServicesSettings>(
   {
     hero: {
       title: { type: String, default: 'บริการล้างถังเก็บน้ำ' },
+      titleColor: { type: String, default: '#ffffff' },
       subtitle: { type: String, default: 'สะอาด ปลอดภัย ได้มาตรฐาน' },
+      subtitleColor: { type: String, default: '#38bdf8' },
       description: { type: String, default: 'เราดูแลความสะอาดของถังเก็บน้ำ ด้วยทีมงานมืออาชีพ อุปกรณ์ครบครัน ปลอดภัยทั้งคุณและคนในครอบครัว' },
+      descriptionColor: { type: String, default: '#d1d5db' },
       image: { type: String, default: '/cover/coverherosr.png' },
       features: {
         type: [{ title: String, desc: String }],
@@ -67,8 +80,11 @@ const ServicesSettingsSchema = new Schema<IServicesSettings>(
     },
     why: {
       title: { type: String, default: 'ทำไมต้องล้างถังเก็บน้ำ' },
+      titleColor: { type: String, default: '#0a1628' },
       titleBlue: { type: String, default: 'อย่างน้อยทุก 6 เดือน?' },
+      titleBlueColor: { type: String, default: '#1d4ed8' },
       description: { type: String, default: 'ถังเก็บน้ำที่ไม่ได้รับการดูแล จะเป็นแหล่งสะสมของตะกอน สิ่งสกปรก แบคทีเรีย และเชื้อโรคต่างๆ ซึ่งส่งผลกระทบต่อสุขภาพของคุณและคนในครอบครัว' },
+      descriptionColor: { type: String, default: '#4b5563' },
       image: { type: String, default: '/article/coversevice.png' },
       symptoms: {
         type: [{ label: String }],
@@ -124,6 +140,10 @@ const ServicesSettingsSchema = new Schema<IServicesSettings>(
       },
     },
     faq: {
+      heading: { type: String, default: 'คำถามที่พบบ่อย' },
+      headingColor: { type: String, default: '#0a1628' },
+      questionColor: { type: String, default: '#0a1628' },
+      answerColor: { type: String, default: '#4b5563' },
       items: {
         type: [{ question: String, answer: String }],
         default: [

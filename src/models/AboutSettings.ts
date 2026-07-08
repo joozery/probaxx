@@ -4,8 +4,11 @@ export interface IAboutSettings extends Document {
   hero: {
     badge: string
     title: string
+    titleColor: string
     titleBlue: string
+    titleBlueColor: string
     description: string
+    descriptionColor: string
     image: string
   }
   why: {
@@ -16,8 +19,11 @@ export interface IAboutSettings extends Document {
   equipment: {
     label: string
     title: string
+    titleColor: string
     titleBlue: string
+    titleBlueColor: string
     description: string
+    descriptionColor: string
     image: string
     items: Array<{ title: string }>
   }
@@ -28,8 +34,11 @@ const AboutSettingsSchema = new Schema<IAboutSettings>(
     hero: {
       badge: { type: String, default: 'ABOUT PRO BAX' },
       title: { type: String, default: 'เกี่ยวกับเรา' },
+      titleColor: { type: String, default: '#ffffff' },
       titleBlue: { type: String, default: 'ผู้เชี่ยวชาญด้านระบบน้ำตัวจริง' },
+      titleBlueColor: { type: String, default: '#38bdf8' },
       description: { type: String, default: 'เราคือผู้นำด้านบริการทำความสะอาดและดูแลรักษาระบบน้ำครบวงจร ด้วยประสบการณ์ที่ยาวนาน และทีมงานมืออาชีพที่พร้อมดูแลคุณด้วยมาตรฐานสูงสุด' },
+      descriptionColor: { type: String, default: '#d1d5db' },
       image: { type: String, default: '/cover/about_hero.png' },
     },
     why: {
@@ -50,8 +59,11 @@ const AboutSettingsSchema = new Schema<IAboutSettings>(
     equipment: {
       label: { type: String, default: 'SAFETY FIRST' },
       title: { type: String, default: 'อุปกรณ์และความปลอดภัย' },
+      titleColor: { type: String, default: '#0a1628' },
       titleBlue: { type: String, default: 'ครบครันระดับสากล' },
+      titleBlueColor: { type: String, default: '#1d4ed8' },
       description: { type: String, default: 'เราให้ความสำคัญกับความปลอดภัยเป็นอันดับหนึ่ง จึงจัดเตรียมอุปกรณ์และเครื่องมือที่ทันสมัย ครบครันสำหรับทุกรูปแบบงาน เพื่อให้มั่นใจได้ว่าการปฏิบัติงานจะเป็นไปอย่างราบรื่นและปลอดภัยที่สุด' },
+      descriptionColor: { type: String, default: '#6b7280' },
       image: { type: String, default: '/cover/about_equipment.png' },
       items: {
         type: [{ title: String }],

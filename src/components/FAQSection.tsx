@@ -21,8 +21,8 @@ export default function FAQSection({ data }: Props) {
         {/* Header */}
         <div className="text-center mb-16">
           <h3 className="text-[#1d4ed8] font-bold text-sm tracking-widest uppercase mb-2">FAQ</h3>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0a1628]">
-            คำถามที่พบบ่อย
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold" style={{ color: data.headingColor || '#0a1628' }}>
+            {data.heading || 'คำถามที่พบบ่อย'}
           </h2>
           <div className="w-12 h-1 bg-[#1d4ed8] mx-auto mt-4" />
         </div>
@@ -42,7 +42,7 @@ export default function FAQSection({ data }: Props) {
                   className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none"
                   onClick={() => toggleFaq(i)}
                 >
-                  <span className={`font-bold text-lg pr-8 ${isOpen ? 'text-[#1d4ed8]' : 'text-[#0a1628]'}`}>
+                  <span className="font-bold text-lg pr-8" style={{ color: isOpen ? '#1d4ed8' : (data.questionColor || '#0a1628') }}>
                     {faq.question}
                   </span>
                   <span className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
@@ -64,7 +64,7 @@ export default function FAQSection({ data }: Props) {
                     isOpen ? 'max-h-48 pb-5 opacity-100' : 'max-h-0 opacity-0'
                   }`}
                 >
-                  <p className="text-gray-600 leading-relaxed text-sm md:text-base">
+                  <p className="leading-relaxed text-sm md:text-base" style={{ color: data.answerColor || '#4b5563' }}>
                     {faq.answer}
                   </p>
                 </div>

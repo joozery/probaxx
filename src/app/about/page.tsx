@@ -80,13 +80,13 @@ export default async function AboutPage() {
                 {s.hero.badge}
               </span>
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-4">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4" style={{ color: s.hero.titleColor || '#ffffff' }}>
               {s.hero.title}
             </h1>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#38bdf8] leading-tight mb-8">
+            <h2 className="text-3xl md:text-4xl font-extrabold leading-tight mb-8" style={{ color: s.hero.titleBlueColor || '#38bdf8' }}>
               {s.hero.titleBlue}
             </h2>
-            <p className="text-gray-300 text-base md:text-lg leading-relaxed max-w-xl">
+            <p className="text-base md:text-lg leading-relaxed max-w-xl" style={{ color: s.hero.descriptionColor || '#d1d5db' }}>
               {s.hero.description}
             </p>
           </div>
@@ -129,11 +129,11 @@ export default async function AboutPage() {
 
             <div className="lg:w-1/2">
               <h3 className="text-[#1d4ed8] font-bold text-sm tracking-widest uppercase mb-2">{s.equipment.label}</h3>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0a1628] leading-tight mb-6">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight mb-6" style={{ color: s.equipment.titleColor || '#0a1628' }}>
                 {s.equipment.title}<br/>
-                <span className="text-[#1d4ed8]">{s.equipment.titleBlue}</span>
+                <span style={{ color: s.equipment.titleBlueColor || '#1d4ed8' }}>{s.equipment.titleBlue}</span>
               </h2>
-              <p className="text-gray-500 text-lg mb-10 leading-relaxed">
+              <p className="text-lg mb-10 leading-relaxed" style={{ color: s.equipment.descriptionColor || '#6b7280' }}>
                 {s.equipment.description}
               </p>
 

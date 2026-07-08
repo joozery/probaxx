@@ -53,15 +53,15 @@ export default function ServicesHero({ data }: Props) {
           </div>
 
           {/* Title */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-3">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-3" style={{ color: data.titleColor || '#ffffff' }}>
             {data.title}
           </h1>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#38bdf8] leading-tight mb-6">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight mb-6" style={{ color: data.subtitleColor || '#38bdf8' }}>
             {data.subtitle}
           </h2>
 
           {/* Description */}
-          <p className="text-gray-300 text-base md:text-lg leading-relaxed mb-10 max-w-xl">
+          <p className="text-base md:text-lg leading-relaxed mb-10 max-w-xl" style={{ color: data.descriptionColor || '#d1d5db' }}>
             {data.description}
           </p>
 

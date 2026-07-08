@@ -20,20 +20,20 @@ interface CaseStudy   { image: string; title: string; description: string; durat
 interface FaqItem     { question: string; answer: string }
 
 interface SettingsState {
-  hero:      { title: string; subtitle: string; description: string; image: string; features: Feature[] }
+  hero:      { title: string; titleColor: string; subtitle: string; subtitleColor: string; description: string; descriptionColor: string; image: string; features: Feature[] }
   services:  { sectionTitle: string; items: ServiceItem[] }
-  why:       { title: string; titleBlue: string; description: string; image: string; symptoms: Symptom[]; benefits: Benefit[] }
+  why:       { title: string; titleColor: string; titleBlue: string; titleBlueColor: string; description: string; descriptionColor: string; image: string; symptoms: Symptom[]; benefits: Benefit[] }
   portfolio: { sectionTitle: string; clients: Client[]; gallery: GalleryItem[]; caseStudy: CaseStudy }
-  faq:       { items: FaqItem[] }
+  faq:       { heading: string; headingColor: string; questionColor: string; answerColor: string; items: FaqItem[] }
 }
 
 /* ─── Defaults ───────────────────────────────────────────────── */
 const DEFAULTS: SettingsState = {
-  hero: { title: 'บริการล้างถังเก็บน้ำ', subtitle: 'สะอาด ปลอดภัย ได้มาตรฐาน', description: 'เราดูแลความสะอาดของถังเก็บน้ำ ด้วยทีมงานมืออาชีพ', image: '/cover/coverherosr.png', features: [{ title: 'ปลอดภัย', desc: 'ไม่เป็นอันตรายต่อสุขภาพ' }, { title: 'ทีมงานมืออาชีพ', desc: 'ประสบการณ์กว่า 10 ปี' }, { title: 'ได้มาตรฐาน', desc: 'ตามมาตรฐานการทำงาน' }] },
+  hero: { title: 'บริการล้างถังเก็บน้ำ', titleColor: '#ffffff', subtitle: 'สะอาด ปลอดภัย ได้มาตรฐาน', subtitleColor: '#38bdf8', description: 'เราดูแลความสะอาดของถังเก็บน้ำ ด้วยทีมงานมืออาชีพ', descriptionColor: '#d1d5db', image: '/cover/coverherosr.png', features: [{ title: 'ปลอดภัย', desc: 'ไม่เป็นอันตรายต่อสุขภาพ' }, { title: 'ทีมงานมืออาชีพ', desc: 'ประสบการณ์กว่า 10 ปี' }, { title: 'ได้มาตรฐาน', desc: 'ตามมาตรฐานการทำงาน' }] },
   services: { sectionTitle: 'บริการของเรา', items: [] },
-  why: { title: 'ทำไมต้องล้างถังเก็บน้ำ', titleBlue: 'อย่างน้อยทุก 6 เดือน?', description: '', image: '', symptoms: [], benefits: [] },
+  why: { title: 'ทำไมต้องล้างถังเก็บน้ำ', titleColor: '#0a1628', titleBlue: 'อย่างน้อยทุก 6 เดือน?', titleBlueColor: '#1d4ed8', description: '', descriptionColor: '#4b5563', image: '', symptoms: [], benefits: [] },
   portfolio: { sectionTitle: 'ผลงานที่ผ่านมา', clients: [], gallery: [], caseStudy: { image: '', title: '', description: '', duration: '', result: '' } },
-  faq: { items: [] },
+  faq: { heading: 'คำถามที่พบบ่อย', headingColor: '#0a1628', questionColor: '#0a1628', answerColor: '#4b5563', items: [] },
 }
 
 /* ─── Styles ─────────────────────────────────────────────────── */
@@ -59,6 +59,42 @@ function Field({ label, value, onChange, rows, placeholder, hint }: {
         ? <textarea rows={rows} value={value} onChange={e => onChange(e.target.value)} className={cn(F, 'resize-none')} placeholder={placeholder} />
         : <input value={value} onChange={e => onChange(e.target.value)} className={F} placeholder={placeholder} />}
       {hint && <p className="mt-1 text-[11px] text-gray-400">{hint}</p>}
+    </div>
+  )
+}
+
+/* ─── ColorField ─────────────────────────────────────────────── */
+function ColorField({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
+  return (
+    <div>
+      <label className={L}>{label}</label>
+      <div className="flex items-center gap-2">
+        <div className="relative w-10 h-10 shrink-0 rounded-lg border border-gray-200 overflow-hidden">
+          <input type="color" value={/^#[0-9a-fA-F]{6}$/.test(value) ? value : '#ffffff'}
+            onChange={e => onChange(e.target.value)}
+            className="absolute -inset-1 w-12 h-12 cursor-pointer" />
+        </div>
+        <input value={value} onChange={e => onChange(e.target.value)} className={F} placeholder="#ffffff" />
+      </div>
+    </div>
+  )
+}
+
+/* ─── TextPreview ────────────────────────────────────────────── */
+function TextPreview({ image, dark, children }: { image: string; dark?: boolean; children: React.ReactNode }) {
+  return (
+    <div>
+      <label className={L}>พรีวิวข้อความ</label>
+      <div className={cn('relative rounded-xl overflow-hidden border border-gray-200 p-5', dark ? 'bg-[#001b3a]' : 'bg-[#f2f8fc]')}>
+        {image && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={image} alt="" className="absolute inset-0 w-full h-full object-cover" />
+        )}
+        <div className={cn('absolute inset-0 bg-gradient-to-r',
+          dark ? 'from-[#001b3a]/80 via-[#001b3a]/40 to-transparent' : 'from-white/70 via-transparent to-white/60')} />
+        <div className="relative">{children}</div>
+      </div>
+      <p className="mt-1 text-[11px] text-gray-400">ตัวอย่างการแสดงผลบนพื้นหลังจริง (ขนาดย่อ)</p>
     </div>
   )
 }
@@ -214,7 +250,7 @@ export default function ServicesSettingsPage() {
 
   useEffect(() => {
     fetch('/api/services-settings').then(r => r.json()).then((d: SettingsState) => {
-      setSettings({ hero: d.hero, services: d.services, why: d.why, portfolio: d.portfolio, faq: d.faq })
+      setSettings({ hero: { ...DEFAULTS.hero, ...d.hero }, services: d.services, why: { ...DEFAULTS.why, ...d.why }, portfolio: d.portfolio, faq: { ...DEFAULTS.faq, ...d.faq } })
       setLoading(false)
     }).catch(() => setLoading(false))
   }, [])
@@ -289,8 +325,18 @@ export default function ServicesSettingsPage() {
           <div className="grid lg:grid-cols-2 gap-5">
             <Card title="ข้อความหลัก">
               <Field label="หัวข้อ (Title)" value={settings.hero.title} onChange={v => upH('title', v)} />
-              <Field label="หัวข้อรอง (Subtitle)" value={settings.hero.subtitle} onChange={v => upH('subtitle', v)} hint="แสดงเป็นสีฟ้าใต้หัวข้อหลัก" />
+              <Field label="หัวข้อรอง (Subtitle)" value={settings.hero.subtitle} onChange={v => upH('subtitle', v)} hint="แสดงใต้หัวข้อหลัก" />
               <Field label="คำอธิบาย" value={settings.hero.description} onChange={v => upH('description', v)} rows={4} />
+              <div className="grid sm:grid-cols-3 gap-3 pt-1 border-t border-gray-100">
+                <ColorField label="สีหัวข้อ" value={settings.hero.titleColor} onChange={v => upH('titleColor', v)} />
+                <ColorField label="สีหัวข้อรอง" value={settings.hero.subtitleColor} onChange={v => upH('subtitleColor', v)} />
+                <ColorField label="สีคำอธิบาย" value={settings.hero.descriptionColor} onChange={v => upH('descriptionColor', v)} />
+              </div>
+              <TextPreview image={settings.hero.image} dark>
+                <h1 className="text-2xl font-extrabold leading-tight mb-1" style={{ color: settings.hero.titleColor || '#ffffff' }}>{settings.hero.title}</h1>
+                <h2 className="text-xl font-extrabold leading-tight mb-2" style={{ color: settings.hero.subtitleColor || '#38bdf8' }}>{settings.hero.subtitle}</h2>
+                <p className="text-xs leading-relaxed max-w-md" style={{ color: settings.hero.descriptionColor || '#d1d5db' }}>{settings.hero.description}</p>
+              </TextPreview>
             </Card>
             <Card title="รูปพื้นหลัง">
               <ImageUpload value={settings.hero.image} onChange={v => upH('image', v)} />
@@ -337,8 +383,20 @@ export default function ServicesSettingsPage() {
           <div className="grid lg:grid-cols-2 gap-5">
             <Card title="ข้อความหลัก">
               <Field label="หัวข้อหลัก" value={settings.why.title} onChange={v => upW('title', v)} />
-              <Field label="หัวข้อต่อเนื่อง" value={settings.why.titleBlue} onChange={v => upW('titleBlue', v)} hint="แสดงเป็นสีน้ำเงินต่อท้ายหัวข้อหลัก" />
+              <Field label="หัวข้อต่อเนื่อง" value={settings.why.titleBlue} onChange={v => upW('titleBlue', v)} hint="แสดงต่อท้ายหัวข้อหลัก" />
               <Field label="คำอธิบาย" value={settings.why.description} onChange={v => upW('description', v)} rows={4} />
+              <div className="grid sm:grid-cols-3 gap-3 pt-1 border-t border-gray-100">
+                <ColorField label="สีหัวข้อหลัก" value={settings.why.titleColor} onChange={v => upW('titleColor', v)} />
+                <ColorField label="สีหัวข้อต่อเนื่อง" value={settings.why.titleBlueColor} onChange={v => upW('titleBlueColor', v)} />
+                <ColorField label="สีคำอธิบาย" value={settings.why.descriptionColor} onChange={v => upW('descriptionColor', v)} />
+              </div>
+              <TextPreview image={settings.why.image}>
+                <h2 className="text-2xl font-extrabold leading-tight mb-2">
+                  <span style={{ color: settings.why.titleColor || '#0a1628' }}>{settings.why.title}</span><br />
+                  <span style={{ color: settings.why.titleBlueColor || '#1d4ed8' }}>{settings.why.titleBlue}</span>
+                </h2>
+                <p className="text-xs font-medium leading-relaxed max-w-md" style={{ color: settings.why.descriptionColor || '#4b5563' }}>{settings.why.description}</p>
+              </TextPreview>
             </Card>
             <Card title="รูปภาพประกอบ">
               <ImageUpload value={settings.why.image} onChange={v => upW('image', v)} />
@@ -420,6 +478,32 @@ export default function ServicesSettingsPage() {
 
         {/* ── FAQ ── */}
         <Tabs.Content value="faq" className="outline-none space-y-5">
+          <Card title="หัวข้อ Section">
+            <Field label="หัวข้อ" value={settings.faq.heading} onChange={v => upF('heading', v)} />
+            <div className="grid sm:grid-cols-3 gap-3 pt-1 border-t border-gray-100">
+              <ColorField label="สีหัวข้อ" value={settings.faq.headingColor} onChange={v => upF('headingColor', v)} />
+              <ColorField label="สีคำถาม" value={settings.faq.questionColor} onChange={v => upF('questionColor', v)} />
+              <ColorField label="สีคำตอบ" value={settings.faq.answerColor} onChange={v => upF('answerColor', v)} />
+            </div>
+            <div>
+              <label className={L}>พรีวิวข้อความ</label>
+              <div className="rounded-xl border border-gray-200 bg-white p-5 text-center">
+                <p className="text-[#1d4ed8] font-bold text-[10px] tracking-widest uppercase mb-1">FAQ</p>
+                <h2 className="text-2xl font-extrabold" style={{ color: settings.faq.headingColor || '#0a1628' }}>{settings.faq.heading}</h2>
+                <div className="w-10 h-0.5 bg-[#1d4ed8] mx-auto mt-2 mb-4" />
+                <div className="text-left border border-gray-200 rounded-xl px-4 py-3">
+                  <p className="font-bold text-sm mb-1" style={{ color: settings.faq.questionColor || '#0a1628' }}>
+                    {settings.faq.items[0]?.question || 'ตัวอย่างคำถาม?'}
+                  </p>
+                  <p className="text-xs leading-relaxed" style={{ color: settings.faq.answerColor || '#4b5563' }}>
+                    {settings.faq.items[0]?.answer || 'ตัวอย่างคำตอบสำหรับดูสีตัวหนังสือ'}
+                  </p>
+                </div>
+              </div>
+              <p className="mt-1 text-[11px] text-gray-400">คำถามที่กางออกจะแสดงเป็นสีน้ำเงินเน้นเสมอ — สีคำถามใช้กับรายการที่หุบอยู่</p>
+            </div>
+          </Card>
+
           <Card title="คำถามที่พบบ่อย" right={<Count n={settings.faq.items.length} unit="คำถาม" />}>
             <div className="space-y-3">
               {settings.faq.items.map((item, i) => (

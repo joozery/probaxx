@@ -13,15 +13,15 @@ interface WhyItem       { title: string; desc: string }
 interface EquipmentItem { title: string }
 
 interface SettingsState {
-  hero:      { badge: string; title: string; titleBlue: string; description: string; image: string }
+  hero:      { badge: string; title: string; titleColor: string; titleBlue: string; titleBlueColor: string; description: string; descriptionColor: string; image: string }
   why:       { label: string; title: string; items: WhyItem[] }
-  equipment: { label: string; title: string; titleBlue: string; description: string; image: string; items: EquipmentItem[] }
+  equipment: { label: string; title: string; titleColor: string; titleBlue: string; titleBlueColor: string; description: string; descriptionColor: string; image: string; items: EquipmentItem[] }
 }
 
 const DEFAULTS: SettingsState = {
-  hero: { badge: 'ABOUT PRO BAX', title: 'เกี่ยวกับเรา', titleBlue: 'ผู้เชี่ยวชาญด้านระบบน้ำตัวจริง', description: '', image: '/cover/about_hero.png' },
+  hero: { badge: 'ABOUT PRO BAX', title: 'เกี่ยวกับเรา', titleColor: '#ffffff', titleBlue: 'ผู้เชี่ยวชาญด้านระบบน้ำตัวจริง', titleBlueColor: '#38bdf8', description: '', descriptionColor: '#d1d5db', image: '/cover/about_hero.png' },
   why: { label: 'WHY CHOOSE US', title: 'ทำไมต้องเลือก PRO BAX', items: [] },
-  equipment: { label: 'SAFETY FIRST', title: 'อุปกรณ์และความปลอดภัย', titleBlue: 'ครบครันระดับสากล', description: '', image: '/cover/about_equipment.png', items: [] },
+  equipment: { label: 'SAFETY FIRST', title: 'อุปกรณ์และความปลอดภัย', titleColor: '#0a1628', titleBlue: 'ครบครันระดับสากล', titleBlueColor: '#1d4ed8', description: '', descriptionColor: '#6b7280', image: '/cover/about_equipment.png', items: [] },
 }
 
 /* ─── Styles ─────────────────────────────────────────────────── */
@@ -45,6 +45,42 @@ function Field({ label, value, onChange, rows, placeholder, hint }: {
         ? <textarea rows={rows} value={value} onChange={e => onChange(e.target.value)} className={cn(F, 'resize-none')} placeholder={placeholder} />
         : <input value={value} onChange={e => onChange(e.target.value)} className={F} placeholder={placeholder} />}
       {hint && <p className="mt-1 text-[11px] text-gray-400">{hint}</p>}
+    </div>
+  )
+}
+
+/* ─── ColorField ─────────────────────────────────────────────── */
+function ColorField({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
+  return (
+    <div>
+      <label className={L}>{label}</label>
+      <div className="flex items-center gap-2">
+        <div className="relative w-10 h-10 shrink-0 rounded-lg border border-gray-200 overflow-hidden">
+          <input type="color" value={/^#[0-9a-fA-F]{6}$/.test(value) ? value : '#ffffff'}
+            onChange={e => onChange(e.target.value)}
+            className="absolute -inset-1 w-12 h-12 cursor-pointer" />
+        </div>
+        <input value={value} onChange={e => onChange(e.target.value)} className={F} placeholder="#ffffff" />
+      </div>
+    </div>
+  )
+}
+
+/* ─── TextPreview ────────────────────────────────────────────── */
+function TextPreview({ image, dark, children }: { image: string; dark?: boolean; children: React.ReactNode }) {
+  return (
+    <div>
+      <label className={L}>พรีวิวข้อความ</label>
+      <div className={cn('relative rounded-xl overflow-hidden border border-gray-200 p-5', dark ? 'bg-[#001b3a]' : 'bg-[#f2f8fc]')}>
+        {image && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={image} alt="" className="absolute inset-0 w-full h-full object-cover" />
+        )}
+        <div className={cn('absolute inset-0 bg-gradient-to-r',
+          dark ? 'from-[#001b3a]/90 via-[#001b3a]/70 to-[#001b3a]/30' : 'from-white/70 via-transparent to-white/60')} />
+        <div className="relative">{children}</div>
+      </div>
+      <p className="mt-1 text-[11px] text-gray-400">ตัวอย่างการแสดงผลบนพื้นหลังจริง (ขนาดย่อ)</p>
     </div>
   )
 }
@@ -136,7 +172,7 @@ export default function AboutSettingsPage() {
 
   useEffect(() => {
     fetch('/api/about-settings').then(r => r.json()).then((d: SettingsState) => {
-      setSettings({ hero: d.hero, why: d.why, equipment: d.equipment })
+      setSettings({ hero: { ...DEFAULTS.hero, ...d.hero }, why: d.why, equipment: { ...DEFAULTS.equipment, ...d.equipment } })
       setLoading(false)
     }).catch(() => setLoading(false))
   }, [])
@@ -210,8 +246,18 @@ export default function AboutSettingsPage() {
             <Card title="ข้อความหลัก">
               <Field label="ป้ายกำกับ (Badge)" value={settings.hero.badge} onChange={v => upH('badge', v)} hint="ข้อความตัวพิมพ์ใหญ่เหนือหัวข้อ" />
               <Field label="หัวข้อ (Title)" value={settings.hero.title} onChange={v => upH('title', v)} />
-              <Field label="หัวข้อรอง (สีฟ้า)" value={settings.hero.titleBlue} onChange={v => upH('titleBlue', v)} />
+              <Field label="หัวข้อรอง (Subtitle)" value={settings.hero.titleBlue} onChange={v => upH('titleBlue', v)} hint="แสดงใต้หัวข้อหลัก" />
               <Field label="คำอธิบาย" value={settings.hero.description} onChange={v => upH('description', v)} rows={4} />
+              <div className="grid sm:grid-cols-3 gap-3 pt-1 border-t border-gray-100">
+                <ColorField label="สีหัวข้อ" value={settings.hero.titleColor} onChange={v => upH('titleColor', v)} />
+                <ColorField label="สีหัวข้อรอง" value={settings.hero.titleBlueColor} onChange={v => upH('titleBlueColor', v)} />
+                <ColorField label="สีคำอธิบาย" value={settings.hero.descriptionColor} onChange={v => upH('descriptionColor', v)} />
+              </div>
+              <TextPreview image={settings.hero.image} dark>
+                <h1 className="text-2xl font-extrabold leading-tight mb-1" style={{ color: settings.hero.titleColor || '#ffffff' }}>{settings.hero.title}</h1>
+                <h2 className="text-xl font-extrabold leading-tight mb-2" style={{ color: settings.hero.titleBlueColor || '#38bdf8' }}>{settings.hero.titleBlue}</h2>
+                <p className="text-xs leading-relaxed max-w-md" style={{ color: settings.hero.descriptionColor || '#d1d5db' }}>{settings.hero.description}</p>
+              </TextPreview>
             </Card>
             <Card title="รูปพื้นหลัง">
               <ImageUpload value={settings.hero.image} onChange={v => upH('image', v)} />
@@ -252,8 +298,21 @@ export default function AboutSettingsPage() {
             <Card title="ข้อความหลัก">
               <Field label="Label (อังกฤษ)" value={settings.equipment.label} onChange={v => upE('label', v)} placeholder="SAFETY FIRST" />
               <Field label="หัวข้อ" value={settings.equipment.title} onChange={v => upE('title', v)} />
-              <Field label="หัวข้อต่อเนื่อง (สีน้ำเงิน)" value={settings.equipment.titleBlue} onChange={v => upE('titleBlue', v)} />
+              <Field label="หัวข้อต่อเนื่อง" value={settings.equipment.titleBlue} onChange={v => upE('titleBlue', v)} hint="แสดงต่อท้ายหัวข้อหลัก" />
               <Field label="คำอธิบาย" value={settings.equipment.description} onChange={v => upE('description', v)} rows={4} />
+              <div className="grid sm:grid-cols-3 gap-3 pt-1 border-t border-gray-100">
+                <ColorField label="สีหัวข้อ" value={settings.equipment.titleColor} onChange={v => upE('titleColor', v)} />
+                <ColorField label="สีหัวข้อต่อเนื่อง" value={settings.equipment.titleBlueColor} onChange={v => upE('titleBlueColor', v)} />
+                <ColorField label="สีคำอธิบาย" value={settings.equipment.descriptionColor} onChange={v => upE('descriptionColor', v)} />
+              </div>
+              <TextPreview image="">
+                <p className="text-[#1d4ed8] font-bold text-[10px] tracking-widest uppercase mb-1">{settings.equipment.label}</p>
+                <h2 className="text-2xl font-extrabold leading-tight mb-2">
+                  <span style={{ color: settings.equipment.titleColor || '#0a1628' }}>{settings.equipment.title}</span><br />
+                  <span style={{ color: settings.equipment.titleBlueColor || '#1d4ed8' }}>{settings.equipment.titleBlue}</span>
+                </h2>
+                <p className="text-xs leading-relaxed max-w-md" style={{ color: settings.equipment.descriptionColor || '#6b7280' }}>{settings.equipment.description}</p>
+              </TextPreview>
             </Card>
             <Card title="รูปภาพประกอบ">
               <ImageUpload value={settings.equipment.image} onChange={v => upE('image', v)} />
