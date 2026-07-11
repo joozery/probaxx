@@ -25,8 +25,8 @@ import { cn } from '@/lib/utils'
 
 const navItems = [
   { label: 'ภาพรวม', href: '/admin', icon: LayoutDashboard },
-  { label: 'ข้อความ', href: '/admin/messages', icon: MessageSquare, badge: 3 },
-  { label: 'ใบเสนอราคา', href: '/admin/quotes', icon: ClipboardList, badge: 2 },
+  { label: 'ข้อความ', href: '/admin/messages', icon: MessageSquare },
+  { label: 'ใบเสนอราคา', href: '/admin/quotes', icon: ClipboardList },
   { label: 'หน้าแรก', href: '/admin/home', icon: Home },
   { label: 'บทความ', href: '/admin/articles', icon: FileText },
   { label: 'บริการ', href: '/admin/services', icon: Wrench },
@@ -50,10 +50,25 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
   const [me, setMe] = useState<{ name: string; email: string; role: string } | null>(null)
+  const [badges, setBadges] = useState<Record<string, number>>({})
 
   useEffect(() => {
     fetch('/api/auth/me').then(r => r.ok ? r.json() : null).then(data => setMe(data))
   }, [])
+
+  useEffect(() => {
+    Promise.all([
+      fetch('/api/messages').then(r => r.ok ? r.json() : []),
+      fetch('/api/quotes').then(r => r.ok ? r.json() : []),
+    ])
+      .then(([messages, quotes]: [{ status: string }[], { status: string }[]]) => {
+        setBadges({
+          '/admin/messages': messages.filter(m => m.status === 'new').length,
+          '/admin/quotes': quotes.filter(q => q.status === 'pending').length,
+        })
+      })
+      .catch(() => {})
+  }, [pathname])
 
   async function handleLogout() {
     await fetch('/api/auth/logout', { method: 'POST' })
@@ -128,6 +143,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
             {navItems.map((item) => {
               const Icon = item.icon
               const active = isActive(item.href)
+              const badge = badges[item.href] ?? 0
               return (
                 <Link
                   key={item.href}
@@ -154,21 +170,21 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
                   {!collapsed && (
                     <>
                       <span className="flex-1 whitespace-nowrap">{item.label}</span>
-                      {item.badge != null && (
+                      {badge > 0 && (
                         <span className={cn(
                           'text-[10px] font-black px-2 py-0.5 rounded-full min-w-[20px] text-center',
                           active
                             ? 'bg-[#f97316] text-white'
                             : 'bg-slate-200 text-slate-500 group-hover:bg-slate-300'
                         )}>
-                          {item.badge}
+                          {badge}
                         </span>
                       )}
                     </>
                   )}
 
                   {/* Badge dot when collapsed */}
-                  {collapsed && item.badge != null && (
+                  {collapsed && badge > 0 && (
                     <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#f97316] rounded-full" />
                   )}
                 </Link>
